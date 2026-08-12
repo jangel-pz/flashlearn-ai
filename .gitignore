@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+jest.config.mjs
 
 # next.js
 /.next/
