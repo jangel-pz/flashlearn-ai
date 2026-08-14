@@ -27,9 +27,7 @@ export async function updateSession(request) {
     },
   );
 
-  /* Importante: no metas lógica propia entre createServerClient() y getUser(). Un simple descuido aquí puede hacer que usuarios se desconecten sin motivo aparente, y es un error muy difícil de rastrear.
-  await supabase.auth.getUser()
-  */
+  await supabase.auth.getUser();
 
   return supabaseResponse;
 }
