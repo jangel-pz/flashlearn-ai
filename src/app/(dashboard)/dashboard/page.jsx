@@ -1,10 +1,14 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { logout } from "@/app/actions/login";
 
 /* Esta página comprueba POR SU CUENTA si hay un usuario logueado. Usa getUser() (no getSession()) porque getUser() verifica el token contra los servidores de Supabase mientras que getSession() solo lee la cookie (que en teoría se podría falsificar).
  */
-export default async function DashboardPage() {
+export default async function DashboardPage({ searchParams }) {
+  const params = await searchParams;
+  const message = params?.message;
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -14,13 +18,55 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
+  const { data: decks, error: decksError } = await supabase
+    .from("decks")
+    .select("id, title, created_at")
+    .order("created_at", { ascending: false });
+
+  if (decksError) {
+    console.error(decksError);
+  }
+
   return (
-    <div className="max-w-90 my-20 mx-auto p-6">
+    <div className="max-w-2xl my-20 mx-auto p-6">
       <h1>Bienvenido</h1>
       <p>Sesión iniciada como: {user.email}</p>
 
-      <form action={logout}>
-        <button type="submit">Cerrar sesión</button>
+      {message && <p className="text-green-600 mt-4">{message}</p>}
+
+      <div className="flex items-center justify-between mt-8">
+        <h2 className="text-lg font-medium">Tus mazos</h2>
+        <Link
+          href="/decks/new"
+          className="text-sm bg-blue-600 text-white px-3 py-2 rounded"
+        >
+          + Crear mazo
+        </Link>
+      </div>
+
+      {!decks || decks.length === 0 ? (
+        <p className="mt-4 text-gray-500">
+          Todavía no has creado ningún mazo. Empieza subiendo un archivo.
+        </p>
+      ) : (
+        <ul className="flex flex-col gap-2 mt-4">
+          {decks.map((deck) => (
+            <li key={deck.id}>
+              <Link
+                href={`/decks/${deck.id}`}
+                className="block border rounded-lg p-3 hover:bg-gray-50"
+              >
+                {deck.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <form action={logout} className="mt-10">
+        <button type="submit" className="text-sm text-gray-500 underline">
+          Cerrar sesión
+        </button>
       </form>
     </div>
   );
