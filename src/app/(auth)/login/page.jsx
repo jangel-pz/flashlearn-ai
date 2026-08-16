@@ -1,4 +1,5 @@
 import Link from "next/link";
+import UserForm from "@/components/UserForm";
 import { login } from "@/app/actions/login";
 
 /* Se usa un <form> con Server Action en vez de manejar el estado del formulario con JavaScript en el cliente
@@ -13,31 +14,7 @@ export default async function LoginPage({ searchParams }) {
 
       {error && <p className="text-red-600">{error}</p>}
 
-      <form action={login} className="flex flex-col gap-3">
-        <label htmlFor="email">
-          Email
-          <input
-            id="email"
-            name="email"
-            type="email"
-            required
-            className="block w-full"
-          />
-        </label>
-
-        <label htmlFor="password">
-          Contraseña
-          <input
-            id="password"
-            name="password"
-            type="password"
-            required
-            className="block w-full"
-          />
-        </label>
-
-        <button type="submit">Entrar</button>
-      </form>
+      <UserForm submitAction={login} isLogin />
 
       <p className="mt-4">
         ¿No tienes una cuenta? <Link href="/signup">Regístrate</Link>
