@@ -1,0 +1,67 @@
+import { notFound, redirect } from "next/navigation";
+import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
+import { Flashcard } from "@/components/Flashcard";
+
+export default async function DeckPage({ params }) {
+  const { id } = await params;
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const { data: deck, error: deckError } = await supabase
+    .from("decks")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  // RLS impide leer mazos ajenos. Se trata error generico
+  if (deckError || !deck) {
+    notFound();
+  }
+
+  const { data: cards, error: cardsError } = await supabase
+    .from("cards")
+    .select("*")
+    .eq("deck_id", id)
+    .order("position");
+
+  if (cardsError) {
+    console.error(cardsError);
+  }
+
+  return (
+    <div className="max-w-2xl my-12 mx-auto p-6">
+      <Link href="/dashboard" className="text-sm text-gray-500">
+        ← Volver
+      </Link>
+
+      <h1 className="mt-2">{deck.title}</h1>
+      <p className="text-sm text-gray-500">
+        {cards?.length ?? 0} tarjeta{cards?.length === 1 ? "" : "s"}
+      </p>
+
+      {!cards || cards.length === 0 ? (
+        <p className="mt-8 text-gray-500">
+          Este mazo todavía no tiene tarjetas.
+        </p>
+      ) : (
+        <div className="flex flex-col gap-4 mt-8">
+          {cards.map((card) => (
+            <Flashcard
+              key={card.id}
+              question={card.question}
+              answer={card.answer}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
