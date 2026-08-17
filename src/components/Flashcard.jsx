@@ -1,27 +1,35 @@
 "use client";
 
 import { useState } from "react";
+import { explainCard } from "@/app/actions/explainCard";
 
 // Componente de cliente para mostrar/ocultar respuestas
-export function Flashcard({ question, answer }) {
+export function Flashcard({ id, question, answer }) {
   const [showAnswer, setShowAnswer] = useState(false);
+  const [explanation, setExplanation] = useState(null);
+  const [isExplaining, setIsExplaining] = useState(false);
+  const [explainError, setExplainError] = useState(null);
+
+  async function handleExplain() {
+    setIsExplaining(true);
+    setExplainError(null);
+
+    const result = await explainCard(id);
+
+    if (result.error) {
+      setExplainError(result.error);
+    } else {
+      setExplanation(result.explanation);
+    }
+
+    setIsExplaining(false);
+  }
 
   return (
     <div className="border rounded-lg p-4">
       <p className="font-medium">{question}</p>
 
-      {showAnswer ? (
-        <div>
-          <p className="mt-3 text-gray-700">{answer}</p>
-          <button
-            type="button"
-            onClick={() => setShowAnswer(false)}
-            className="mt-3 text-sm text-red-600 underline"
-          >
-            Ocultar respuesta
-          </button>
-        </div>
-      ) : (
+      {!showAnswer ? (
         <button
           type="button"
           onClick={() => setShowAnswer(true)}
@@ -29,6 +37,29 @@ export function Flashcard({ question, answer }) {
         >
           Ver respuesta
         </button>
+      ) : (
+        <div>
+          <p className="mt-3 text-gray-700">{answer}</p>
+
+          {explanation ? (
+            <p className="mt-3 text-sm text-gray-600 border-t pt-3">
+              {explanation}
+            </p>
+          ) : (
+            <button
+              type="button"
+              onClick={handleExplain}
+              disabled={isExplaining}
+              className="mt-3 text-sm text-blue-600 underline disabled:text-gray-400 disabled:no-underline"
+            >
+              {isExplaining ? "Generando explicación…" : "Explicar más a fondo"}
+            </button>
+          )}
+
+          {explainError && (
+            <p className="mt-2 text-sm text-red-600">{explainError}</p>
+          )}
+        </div>
       )}
     </div>
   );

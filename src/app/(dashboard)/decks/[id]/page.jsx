@@ -64,6 +64,7 @@ export default async function DeckPage({ params, searchParams }) {
           {cards.map((card) => (
             <Flashcard
               key={card.id}
+              id={card.id}
               question={card.question}
               answer={card.answer}
             />
