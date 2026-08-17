@@ -41,19 +41,42 @@ export function Flashcard({ id, question, answer }) {
         <div>
           <p className="mt-3 text-gray-700">{answer}</p>
 
-          {explanation ? (
-            <p className="mt-3 text-sm text-gray-600 border-t pt-3">
-              {explanation}
-            </p>
-          ) : (
+          <div className="mt-3 flex items-center justify-between">
             <button
               type="button"
-              onClick={handleExplain}
-              disabled={isExplaining}
-              className="mt-3 text-sm text-blue-600 underline disabled:text-gray-400 disabled:no-underline"
+              onClick={() => setShowAnswer(false)}
+              className="text-sm text-red-600 underline"
             >
-              {isExplaining ? "Generando explicación…" : "Explicar más a fondo"}
+              Ocultar respuesta
             </button>
+
+            {!explanation && (
+              <button
+                type="button"
+                onClick={handleExplain}
+                disabled={isExplaining}
+                className="text-sm text-blue-600 underline disabled:text-gray-400 disabled:no-underline"
+              >
+                {isExplaining
+                  ? "Generando explicación…"
+                  : "Explicar más a fondo"}
+              </button>
+            )}
+          </div>
+
+          {explanation && (
+            <div>
+              <p className="mt-3 text-sm text-gray-600 border-t pt-3">
+                {explanation}
+              </p>
+              <button
+                type="button"
+                onClick={() => setExplanation(false)}
+                className="mt-3 text-sm text-red-600 underline"
+              >
+                Ocultar explicación
+              </button>
+            </div>
           )}
 
           {explainError && (
