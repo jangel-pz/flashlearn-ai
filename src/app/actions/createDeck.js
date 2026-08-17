@@ -48,7 +48,7 @@ export async function generateDeckFromFiles(formData) {
     })),
   );
 
-  let title, cards;
+  let title, context_summary, cards;
   try {
     const result = await generateText({
       model: google("gemini-3.5-flash-lite"),
@@ -70,7 +70,7 @@ export async function generateDeckFromFiles(formData) {
         },
       ],
     });
-    ({ title, cards } = result.output);
+    ({ title, context_summary, cards } = result.output);
   } catch (error) {
     // Errores de red/API (p. e. cuota gratuita agotada) y errores del modelo de IA
     console.error("Error generando el mazo con IA:", error);
@@ -85,6 +85,7 @@ export async function generateDeckFromFiles(formData) {
     .insert({
       user_id: user.id,
       title,
+      context_summary,
       source_text: files.map((f) => f.name).join(", "),
     })
     .select()
