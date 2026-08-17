@@ -2,9 +2,11 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Flashcard } from "@/components/Flashcard";
+import { DeleteDeckButton } from "@/components/DeleteDeckButton";
 
-export default async function DeckPage({ params }) {
+export default async function DeckPage({ params, searchParams }) {
   const { id } = await params;
+  const { error: deleteError } = await searchParams;
   const supabase = await createClient();
 
   const {
@@ -38,11 +40,17 @@ export default async function DeckPage({ params }) {
 
   return (
     <div className="max-w-2xl my-12 mx-auto p-6">
-      <Link href="/dashboard" className="text-sm text-gray-500">
-        ← Volver
-      </Link>
+      <div className="flex items-center justify-between">
+        <Link href="/dashboard" className="text-sm text-gray-500">
+          ← Volver
+        </Link>
+        <DeleteDeckButton deckId={deck.id} />
+      </div>
 
       <h1 className="mt-2">{deck.title}</h1>
+
+      {deleteError && <p className="text-red-600 mt-2">{deleteError}</p>}
+
       <p className="text-sm text-gray-500">
         {cards?.length ?? 0} tarjeta{cards?.length === 1 ? "" : "s"}
       </p>
