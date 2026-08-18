@@ -6,6 +6,9 @@ import { google } from "@ai-sdk/google";
 import { createClient } from "@/lib/supabase/server";
 import { quizGenerationSchema } from "@/lib/ai/schemas";
 
+// Numero de preguntas por intento de cuestionario. Se eligen al azar en cada intento y ahorran uso de IA las primeras veces
+const QUESTIONS_PER_ATTEMPT = 10;
+
 export async function generateQuiz(deckId) {
   const supabase = await createClient();
 
@@ -17,11 +20,11 @@ export async function generateQuiz(deckId) {
     redirect("/login");
   }
 
+  // En este punto solo se necesitan los ids de las tarjetas para comprobar si ya tienen preguntas guardadas
   const { data: cards, error: cardsError } = await supabase
     .from("cards")
-    .select("id, question, answer")
-    .eq("deck_id", deckId)
-    .order("position");
+    .select("id")
+    .eq("deck_id", deckId);
 
   if (cardsError || !cards || cards.length === 0) {
     redirect(
@@ -30,24 +33,46 @@ export async function generateQuiz(deckId) {
     );
   }
 
+  // Eleccion de tarjetas/preguntas al azar para este intento
+  const shuffled = [...cards].sort(() => Math.random() - 0.5);
+  const attemptCardIds = shuffled
+    .slice(0, QUESTIONS_PER_ATTEMPT)
+    .map((c) => c.id);
+
   // Comprobacion de cartas que ya tienen su pregunta de test guardada para no volver a gastar cuota de IA en ellas y como proteccion por si la IA no genero alguna la vez anterior
-  const cardIds = cards.map((c) => c.id);
   const { data: existing, error: existingError } = await supabase
     .from("quiz_questions")
     .select("card_id")
-    .in("card_id", cardIds);
+    .in("card_id", attemptCardIds);
 
   if (existingError) {
     console.error("Error consultando cuestionario:", existingError);
   }
 
   const existingCardIds = new Set((existing ?? []).map((q) => q.card_id));
-  const cardsNeedingQuestion = cards.filter((c) => !existingCardIds.has(c.id));
+  const cardsNeedingQuestion = attemptCardIds.filter(
+    (cardId) => !existingCardIds.has(cardId),
+  );
 
   // Si faltan preguntas, se generan todas en una sola llamada a la IA
   if (cardsNeedingQuestion.length > 0) {
-    let generatedQuestions;
+    const { data: fullCards, error: fullCardsError } = await supabase
+      .from("cards")
+      .select("id, question, answer")
+      .in("id", cardsNeedingQuestion);
 
+    if (fullCardsError || !fullCards) {
+      console.error(
+        "Error obteniendo tarjetas para el cuestionario:",
+        fullCardsError,
+      );
+      redirect(
+        `/decks/${deckId}?error=` +
+          encodeURIComponent("No se pudo generar el cuestionario"),
+      );
+    }
+
+    let generatedQuestions;
     try {
       const result = await generateText({
         model: google("gemini-3.5-flash-lite"),
@@ -76,7 +101,7 @@ export async function generateQuiz(deckId) {
     }
 
     // Insercion de preguntas cuyo card_id corresponde de verdad a una carta que esperada (protección ante ids inventados por la IA).
-    const validCardIds = new Set(cardsNeedingQuestion.map((c) => c.id));
+    const validCardIds = new Set(cardsNeedingQuestion);
     const questionsToInsert = generatedQuestions
       .filter((q) => validCardIds.has(q.card_id))
       .map((q) => ({
@@ -101,5 +126,6 @@ export async function generateQuiz(deckId) {
     }
   }
 
-  redirect(`/decks/${deckId}/quiz`);
+  // Las tarjetas/preguntas del intento actual se pasan a la pagina del cuestionario como parametros en la URL
+  redirect(`/decks/${deckId}/quiz?cards=${attemptCardIds.join(",")}`);
 }

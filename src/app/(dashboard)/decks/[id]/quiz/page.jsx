@@ -3,8 +3,9 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { QuizPlayer } from "@/components/QuizPlayer";
 
-export default async function QuizPage({ params }) {
+export default async function QuizPage({ params, searchParams }) {
   const { id } = await params;
+  const { cards: cardsParam } = await searchParams;
   const supabase = await createClient();
 
   const {
@@ -25,32 +26,39 @@ export default async function QuizPage({ params }) {
     notFound();
   }
 
+  // Si las tarjetas elegidas para este intento no son validas, se redirige al usuario para empezar un intento nuevo.
+  const requestedCardIds = (cardsParam ?? "").split(",").filter(Boolean);
+
+  if (requestedCardIds.length === 0) {
+    redirect(
+      `/decks/${id}?error=` +
+        encodeURIComponent(
+          "Pulsa 'Hacer cuestionario' para empezar un intento",
+        ),
+    );
+  }
+
   // Cada carta junto con su pregunta de test (si ya existe)
   const { data: cards, error: cardsError } = await supabase
     .from("cards")
-    .select(
-      "id, position, quiz_questions(question_text, options, correct_option)",
-    )
+    .select("id, quiz_questions(question_text, options, correct_option)")
     .eq("deck_id", id)
-    .order("position");
+    .in("id", requestedCardIds);
 
   if (cardsError) {
     console.error(cardsError);
   }
 
-  // Si el cuestionario todavía no se ha generado se redirige al usuario pulse el botón de generarlo.
-  const missingQuestions =
-    !cards ||
-    cards.length === 0 ||
-    cards.some(
-      (card) => !card.quiz_questions || card.quiz_questions.length === 0,
-    );
+  // Si algun id pedido en la URL no pertenece al mazo o no tiene pregunta guardada se redirige al usuario para empezar un intento nuevo y correcto.
+  const validCards = (cards ?? []).filter(
+    (card) => card.quiz_questions && card.quiz_questions.length > 0,
+  );
 
-  if (missingQuestions) {
+  if (validCards.length !== requestedCardIds.length) {
     redirect(
       `/decks/${id}?error=` +
         encodeURIComponent(
-          "Genera primero el cuestionario con el botón 'Hacer cuestionario'",
+          "Ese cuestionario ya no está disponible, empieza uno nuevo",
         ),
     );
   }
