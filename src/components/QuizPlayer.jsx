@@ -108,14 +108,14 @@ export function QuizPlayer({ questions }) {
         <button
           type="button"
           onClick={() => setSubmitted(true)}
-          disabled={answeredCount < questions.length}
+          disabled={answeredCount < shuffledQuestions.length}
           className="self-start bg-blue-600 text-white px-4 py-2 rounded disabled:bg-gray-400"
         >
           Corregir cuestionario
         </button>
       ) : (
         <p className="text-lg font-medium">
-          Resultado: {score} de {questions.length} correctas
+          Resultado: {score} de {shuffledQuestions.length} correctas
         </p>
       )}
     </div>
