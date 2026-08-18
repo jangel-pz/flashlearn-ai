@@ -3,10 +3,11 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Flashcard } from "@/components/Flashcard";
 import { DeleteDeckButton } from "@/components/DeleteDeckButton";
+import { GenerateQuizButton } from "@/components/CreateQuizButton";
 
 export default async function DeckPage({ params, searchParams }) {
   const { id } = await params;
-  const { error: deleteError } = await searchParams;
+  const { error: pageError } = await searchParams;
   const supabase = await createClient();
 
   const {
@@ -44,12 +45,15 @@ export default async function DeckPage({ params, searchParams }) {
         <Link href="/dashboard" className="text-sm text-gray-500">
           ← Volver
         </Link>
-        <DeleteDeckButton deckId={deck.id} />
+        <div className="flex items-center gap-3">
+          <GenerateQuizButton deckId={deck.id} />
+          <DeleteDeckButton deckId={deck.id} />
+        </div>
       </div>
 
       <h1 className="mt-2">{deck.title}</h1>
 
-      {deleteError && <p className="text-red-600 mt-2">{deleteError}</p>}
+      {pageError && <p className="text-red-600 mt-2">{pageError}</p>}
 
       <p className="text-sm text-gray-500">
         {cards?.length ?? 0} tarjeta{cards?.length === 1 ? "" : "s"}
