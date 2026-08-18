@@ -10,7 +10,40 @@ function ResultIcon({ correct }) {
   );
 }
 
+// Devuelve una copia de un array en orden aleatorio (algoritmo de Fisher-Yates).
+function shuffleArray(array) {
+  const result = [...array];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+// Baraja el orden de las preguntas y, dentro de cada una, el orden de sus opciones, recalculando el índice de la opción correcta para que siga apuntando a la correcta tras el barajado.
+function shuffleQuiz(questions) {
+  const shuffledQuestions = shuffleArray(questions);
+
+  return shuffledQuestions.map((q) => {
+    const optionsWithOriginalIndex = q.options.map((option, index) => ({
+      option,
+      isCorrect: index === q.correctOption,
+    }));
+
+    const shuffledOptions = shuffleArray(optionsWithOriginalIndex);
+
+    return {
+      ...q,
+      options: shuffledOptions.map((o) => o.option),
+      correctOption: shuffledOptions.findIndex((o) => o.isCorrect),
+    };
+  });
+}
+
 export function QuizPlayer({ questions }) {
+  // El barajado se calcula una sola vez al montar el componente, no en cada renderizado. Así el orden se mantiene estable mientras el usuario responde el cuestionario.
+  const [shuffledQuestions] = useState(() => shuffleQuiz(questions));
+
   // answers: { [cardId]: <indice de opcion elegida> }
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
@@ -21,14 +54,14 @@ export function QuizPlayer({ questions }) {
   }
 
   const answeredCount = Object.keys(answers).length;
-  const score = questions.reduce(
+  const score = shuffledQuestions.reduce(
     (total, q) => (answers[q.cardId] === q.correctOption ? total + 1 : total),
     0,
   );
 
   return (
     <div className="mt-8 flex flex-col gap-6">
-      {questions.map((q, qIndex) => {
+      {shuffledQuestions.map((q, qIndex) => {
         const selected = answers[q.cardId];
 
         return (
