@@ -53,6 +53,22 @@ export function QuizPlayer({ questions }) {
     setAnswers((prev) => ({ ...prev, [cardId]: optionIndex }));
   }
 
+  // Marca el cuestionario como corregido y envía los resultados para actualizar las estadísticas de cada tarjeta. Si esa segunda parte tarda o falla, no afecta a lo que el usuario ve en pantalla.
+  async function handleSubmit() {
+    setSubmitted(true);
+
+    const results = shuffledQuestions.map((q) => ({
+      cardId: q.cardId,
+      correct: answers[q.cardId] === q.correctOption,
+    }));
+
+    try {
+      await submitQuizAttempt(results);
+    } catch (error) {
+      console.error("No se pudieron guardar las estadísticas:", error);
+    }
+  }
+
   const answeredCount = Object.keys(answers).length;
   const score = shuffledQuestions.reduce(
     (total, q) => (answers[q.cardId] === q.correctOption ? total + 1 : total),
@@ -107,7 +123,7 @@ export function QuizPlayer({ questions }) {
       {!submitted ? (
         <button
           type="button"
-          onClick={() => setSubmitted(true)}
+          onClick={handleSubmit}
           disabled={answeredCount < shuffledQuestions.length}
           className="self-start bg-blue-600 text-white px-4 py-2 rounded disabled:bg-gray-400"
         >
