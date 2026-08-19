@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Alert } from "@/components/Alert";
+import { LogoutButton } from "@/components/LogoutButton";
 import { createClient } from "@/lib/supabase/server";
-import { logout } from "@/app/actions/login";
 
 /* Esta página comprueba POR SU CUENTA si hay un usuario logueado. Usa getUser() (no getSession()) porque getUser() verifica el token contra los servidores de Supabase mientras que getSession() solo lee la cookie (que en teoría se podría falsificar).
  */
@@ -65,11 +65,7 @@ export default async function DashboardPage({ searchParams }) {
         </ul>
       )}
 
-      <form action={logout} className="mt-10">
-        <button type="submit" className="text-sm text-gray-500 underline">
-          Cerrar sesión
-        </button>
-      </form>
+      <LogoutButton />
     </div>
   );
 }
