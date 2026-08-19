@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
-import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
+import { BackLink } from "@/components/BackLink";
 import { QuizPlayer } from "@/components/QuizPlayer";
+import { createClient } from "@/lib/supabase/server";
 
 export default async function QuizPage({ params, searchParams }) {
   const { id } = await params;
@@ -75,9 +75,7 @@ export default async function QuizPage({ params, searchParams }) {
 
   return (
     <div className="max-w-2xl my-12 mx-auto p-6">
-      <Link href={`/decks/${id}`} className="text-sm text-gray-500">
-        ← Volver al mazo
-      </Link>
+      <BackLink href={`/decks/${id}`} children="← Volver al mazo" />
 
       <h1 className="mt-2">Cuestionario: {deck.title}</h1>
 

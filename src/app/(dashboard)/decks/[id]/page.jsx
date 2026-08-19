@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Alert } from "@/components/Alert";
+import { BackLink } from "@/components/BackLink";
 import { Flashcard } from "@/components/Flashcard";
 import { DeleteDeckButton } from "@/components/DeleteDeckButton";
 import { GenerateQuizButton } from "@/components/CreateQuizButton";
@@ -45,9 +45,7 @@ export default async function DeckPage({ params, searchParams }) {
   return (
     <div className="max-w-2xl my-12 mx-auto p-6">
       <div className="flex items-center justify-between">
-        <Link href="/dashboard" className="text-sm text-gray-500">
-          ← Volver
-        </Link>
+        <BackLink href="/dashboard" children="← Volver al menú" />
         <div className="flex items-center gap-3">
           <GenerateQuizButton deckId={deck.id} />
           <DeleteDeckButton deckId={deck.id} />
