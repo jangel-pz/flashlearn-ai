@@ -67,8 +67,7 @@ export async function explainCard(cardId) {
   } catch (error) {
     console.error("Error generando la explicación con IA:", error);
     return {
-      error:
-        "No se pudo generar la explicación. Puede que se haya agotado la cuota gratuita por hoy.",
+      error: "No se pudo generar la explicación.",
     };
   }
 

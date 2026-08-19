@@ -1,15 +1,18 @@
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { Alert } from "@/components/Alert";
 import { Flashcard } from "@/components/Flashcard";
 import { DeleteDeckButton } from "@/components/DeleteDeckButton";
 import { GenerateQuizButton } from "@/components/CreateQuizButton";
 
 export default async function DeckPage({ params, searchParams }) {
   const { id } = await params;
-  const { error: pageError } = await searchParams;
-  const supabase = await createClient();
+  const sParams = await searchParams;
+  const type = sParams?.type;
+  const message = sParams?.message;
 
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -53,7 +56,7 @@ export default async function DeckPage({ params, searchParams }) {
 
       <h1 className="mt-2">{deck.title}</h1>
 
-      {pageError && <p className="text-red-600 mt-2">{pageError}</p>}
+      <Alert type={type} mesage={message} />
 
       <p className="text-sm text-gray-500">
         {cards?.length ?? 0} tarjeta{cards?.length === 1 ? "" : "s"}

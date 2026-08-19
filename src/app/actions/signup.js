@@ -12,7 +12,8 @@ export async function signup(formData) {
 
   if (!email || !password) {
     redirect(
-      "/signup?error=" + encodeURIComponent("Rellene email y contraseña"),
+      "/signup?type=error&message=" +
+        encodeURIComponent("Rellene email y contraseña"),
     );
   }
 
@@ -31,13 +32,18 @@ export async function signup(formData) {
   });
 
   if (error) {
-    redirect("/signup?error=" + encodeURIComponent(error.message));
+    redirect(
+      "/signup?type=error&message=" +
+        encodeURIComponent(
+          "Ha ocurrido un error. Por favor, intente registrarse de nuevo",
+        ),
+    );
   }
 
   /* Por defecto Supabase exige confirmar el email antes de poder entrar, así que se avisa al usuario de que revise su bandeja de entrada.
    */
   redirect(
-    "/signup?message=" +
+    "/signup?type=success&message=" +
       encodeURIComponent("Le hemos enviado un email para confirmar su cuenta."),
   );
 }

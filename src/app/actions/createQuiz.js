@@ -27,8 +27,12 @@ export async function generateQuiz(deckId) {
     .eq("deck_id", deckId);
 
   if (cardsError || !cards || cards.length === 0) {
+    console.error(
+      "Error obteniendo tarjetas para el cuestionario:",
+      cardsError,
+    );
     redirect(
-      `/decks/${deckId}?error=` +
+      `/decks/${deckId}?type=error&message=` +
         encodeURIComponent("No se pudo generar el cuestionario"),
     );
   }
@@ -67,7 +71,7 @@ export async function generateQuiz(deckId) {
         fullCardsError,
       );
       redirect(
-        `/decks/${deckId}?error=` +
+        `/decks/${deckId}?type=error&message=` +
           encodeURIComponent("No se pudo generar el cuestionario"),
       );
     }
@@ -95,7 +99,7 @@ export async function generateQuiz(deckId) {
     } catch (error) {
       console.error("Error generando el cuestionario con IA:", error);
       redirect(
-        `/decks/${deckId}?error=` +
+        `/decks/${deckId}?type=error&message=` +
           encodeURIComponent("No se pudo generar el cuestionario"),
       );
     }
@@ -119,7 +123,7 @@ export async function generateQuiz(deckId) {
       if (insertError) {
         console.error("Error guardando el cuestionario:", insertError);
         redirect(
-          `/decks/${deckId}?error=` +
+          `/decks/${deckId}?type=error&message=` +
             encodeURIComponent("No se pudo guardar el cuestionario"),
         );
       }

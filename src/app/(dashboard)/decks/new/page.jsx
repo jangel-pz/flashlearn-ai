@@ -1,10 +1,12 @@
+import { Alert } from "@/components/Alert";
 import { generateDeckFromFiles } from "@/app/actions/createDeck";
 
 /* Server Action, sin JavaScript de cliente. El navegador se encarga de mostrar el archivo seleccionado y de bloquear el envío si el campo "required" está vacío.
  */
 export default async function NewDeckPage({ searchParams }) {
   const params = await searchParams;
-  const error = params?.error;
+  const type = params?.type;
+  const message = params?.message;
 
   return (
     <div className="max-w-xl my-20 mx-auto p-6">
@@ -14,7 +16,7 @@ export default async function NewDeckPage({ searchParams }) {
         automáticamente. Puede tardar unos segundos.
       </p>
 
-      {error && <p className="text-red-600 mt-4">{error}</p>}
+      <Alert type={type} mesage={message} />
 
       <form action={generateDeckFromFiles} className="flex flex-col gap-4 mt-6">
         <label htmlFor="files">

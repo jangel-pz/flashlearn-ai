@@ -10,7 +10,8 @@ export async function login(formData) {
 
   if (!email || !password) {
     redirect(
-      "/login?error=" + encodeURIComponent("Rellene email y contraseña"),
+      "/login?type=error&message=" +
+        encodeURIComponent("Rellene email y contraseña"),
     );
   }
 
@@ -20,7 +21,8 @@ export async function login(formData) {
 
   if (error) {
     redirect(
-      "/login?error=" + encodeURIComponent("Email o contraseña incorrectos"),
+      "/login?type=error&message=" +
+        encodeURIComponent("Email o contraseña incorrectos"),
     );
   }
 

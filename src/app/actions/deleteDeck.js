@@ -24,5 +24,7 @@ export async function deleteDeck(deckId) {
     );
   }
 
-  redirect("/dashboard?message=" + encodeURIComponent("Mazo borrado"));
+  redirect(
+    "/dashboard?type=success&message=" + encodeURIComponent("Mazo borrado"),
+  );
 }

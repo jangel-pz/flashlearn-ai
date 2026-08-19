@@ -25,13 +25,15 @@ export async function generateDeckFromFiles(formData) {
   const files = formData.getAll("files").filter((f) => f && f.size > 0);
 
   if (files.length === 0) {
-    redirect("/decks/new?error=" + encodeURIComponent("Sube un archivo"));
+    redirect(
+      "/decks/new?type=error&message=" + encodeURIComponent("Sube un archivo"),
+    );
   }
 
   for (const file of files) {
     if (file.size > MAX_FILE_SIZE_BYTES) {
       redirect(
-        "/decks/new?error=" +
+        "/decks/new?type=error&message=" +
           encodeURIComponent(
             `El archivo "${file.name}" supera el límite de ${MAX_FILE_SIZE_MB}MB`,
           ),
@@ -75,7 +77,8 @@ export async function generateDeckFromFiles(formData) {
     // Errores de red/API (p. e. cuota gratuita agotada) y errores del modelo de IA
     console.error("Error generando el mazo con IA:", error);
     redirect(
-      "/decks/new?error=" + encodeURIComponent("No se pudo generar el mazo"),
+      "/decks/new?type=error&message=" +
+        encodeURIComponent("No se pudo generar el mazo"),
     );
   }
 
@@ -92,9 +95,10 @@ export async function generateDeckFromFiles(formData) {
     .single();
 
   if (deckError) {
-    console.error(deckError);
+    console.error("Error al guardar el mazo", deckError);
     redirect(
-      "/decks/new?error=" + encodeURIComponent("No se pudo guardar el mazo"),
+      "/decks/new?type=error&message=" +
+        encodeURIComponent("No se pudo guardar el mazo"),
     );
   }
 
@@ -110,9 +114,9 @@ export async function generateDeckFromFiles(formData) {
     .insert(cardsToInsert);
 
   if (cardsError) {
-    console.error(cardsError);
+    console.error("Error al guardar las cartas", cardsError);
     redirect(
-      "/decks/new?error=" +
+      "/decks/new?type=error&message=" +
         encodeURIComponent("No se pudieron guardar las cartas"),
     );
   }

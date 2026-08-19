@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Alert } from "@/components/Alert";
 import { createClient } from "@/lib/supabase/server";
 import { logout } from "@/app/actions/login";
 
@@ -7,6 +8,7 @@ import { logout } from "@/app/actions/login";
  */
 export default async function DashboardPage({ searchParams }) {
   const params = await searchParams;
+  const type = params?.type;
   const message = params?.message;
 
   const supabase = await createClient();
@@ -32,7 +34,7 @@ export default async function DashboardPage({ searchParams }) {
       <h1>Bienvenido</h1>
       <p>Sesión iniciada como: {user.email}</p>
 
-      {message && <p className="text-green-600 mt-4">{message}</p>}
+      <Alert type={type} mesage={message} />
 
       <div className="flex items-center justify-between mt-8">
         <h2 className="text-lg font-medium">Tus mazos</h2>
