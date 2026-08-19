@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Alert } from "@/components/Alert";
+import { DeckCard } from "@/components/DeckCard";
 import { LogoutButton } from "@/components/LogoutButton";
 import { createClient } from "@/lib/supabase/server";
 
@@ -53,14 +54,7 @@ export default async function DashboardPage({ searchParams }) {
       ) : (
         <ul className="flex flex-col gap-2 mt-4">
           {decks.map((deck) => (
-            <li key={deck.id}>
-              <Link
-                href={`/decks/${deck.id}`}
-                className="block border rounded-lg p-3 hover:bg-gray-50"
-              >
-                {deck.title}
-              </Link>
-            </li>
+            <DeckCard key={deck.id} id={deck.id} title={deck.title} />
           ))}
         </ul>
       )}
