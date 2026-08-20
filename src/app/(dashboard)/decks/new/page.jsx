@@ -1,4 +1,8 @@
 import { Alert } from "@/components/Alert";
+import {
+  CreateDeckButton,
+  GenerateDeckButton,
+} from "@/components/CreateDeckButton";
 import { generateDeckFromFiles } from "@/app/actions/createDeck";
 
 /* Server Action, sin JavaScript de cliente. El navegador se encarga de mostrar el archivo seleccionado y de bloquear el envío si el campo "required" está vacío.
@@ -32,7 +36,7 @@ export default async function NewDeckPage({ searchParams }) {
           />
         </label>
 
-        <button type="submit">Generar mazo</button>
+        <GenerateDeckButton />
       </form>
     </div>
   );
