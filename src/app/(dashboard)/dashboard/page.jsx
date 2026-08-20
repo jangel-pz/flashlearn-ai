@@ -35,7 +35,7 @@ export default async function DashboardPage({ searchParams }) {
       <h1>Bienvenido</h1>
       <p>Sesión iniciada como: {user.email}</p>
 
-      <Alert type={type} mesage={message} className="mt-4" />
+      <Alert type={type} message={message} className="mt-4" />
 
       <div className="flex items-center justify-between mt-8">
         <h2 className="text-lg font-medium">Tus mazos</h2>

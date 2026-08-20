@@ -20,7 +20,7 @@ export default async function NewDeckPage({ searchParams }) {
         automáticamente. Puede tardar unos segundos.
       </p>
 
-      <Alert type={type} mesage={message} className="mt-4" />
+      <Alert type={type} message={message} className="mt-4" />
 
       <form action={generateDeckFromFiles} className="flex flex-col gap-4 mt-6">
         <label htmlFor="files">

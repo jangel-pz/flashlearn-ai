@@ -54,7 +54,7 @@ export default async function DeckPage({ params, searchParams }) {
 
       <h1 className="mt-2">{deck.title}</h1>
 
-      <Alert type={type} mesage={message} />
+      <Alert type={type} message={message} />
 
       <p className="text-sm text-gray-500">
         {cards?.length ?? 0} tarjeta{cards?.length === 1 ? "" : "s"}
