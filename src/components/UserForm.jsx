@@ -2,7 +2,7 @@
 
 import { Alert } from "@/components/Alert";
 
-function UserForm({ submitAction, isLogin, type, message }) {
+export function UserForm({ submitAction, isLogin, type, message }) {
   return (
     <>
       <Alert type={type} message={message} />
@@ -36,5 +36,3 @@ function UserForm({ submitAction, isLogin, type, message }) {
     </>
   );
 }
-
-export default UserForm;

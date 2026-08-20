@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { submitQuizAttempt } from "@/app/actions/submitQuizAttempt";
 
 function ResultIcon({ correct }) {
   return (
@@ -10,40 +11,7 @@ function ResultIcon({ correct }) {
   );
 }
 
-// Devuelve una copia de un array en orden aleatorio (algoritmo de Fisher-Yates).
-function shuffleArray(array) {
-  const result = [...array];
-  for (let i = result.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [result[i], result[j]] = [result[j], result[i]];
-  }
-  return result;
-}
-
-// Baraja el orden de las preguntas y, dentro de cada una, el orden de sus opciones, recalculando el índice de la opción correcta para que siga apuntando a la correcta tras el barajado.
-function shuffleQuiz(questions) {
-  const shuffledQuestions = shuffleArray(questions);
-
-  return shuffledQuestions.map((q) => {
-    const optionsWithOriginalIndex = q.options.map((option, index) => ({
-      option,
-      isCorrect: index === q.correctOption,
-    }));
-
-    const shuffledOptions = shuffleArray(optionsWithOriginalIndex);
-
-    return {
-      ...q,
-      options: shuffledOptions.map((o) => o.option),
-      correctOption: shuffledOptions.findIndex((o) => o.isCorrect),
-    };
-  });
-}
-
 export function QuizPlayer({ questions }) {
-  // El barajado se calcula una sola vez al montar el componente, no en cada renderizado. Así el orden se mantiene estable mientras el usuario responde el cuestionario.
-  const [shuffledQuestions] = useState(() => shuffleQuiz(questions));
-
   // answers: { [cardId]: <indice de opcion elegida> }
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
@@ -57,7 +25,7 @@ export function QuizPlayer({ questions }) {
   async function handleSubmit() {
     setSubmitted(true);
 
-    const results = shuffledQuestions.map((q) => ({
+    const results = questions.map((q) => ({
       cardId: q.cardId,
       correct: answers[q.cardId] === q.correctOption,
     }));
@@ -70,14 +38,14 @@ export function QuizPlayer({ questions }) {
   }
 
   const answeredCount = Object.keys(answers).length;
-  const score = shuffledQuestions.reduce(
+  const score = questions.reduce(
     (total, q) => (answers[q.cardId] === q.correctOption ? total + 1 : total),
     0,
   );
 
   return (
     <div className="mt-8 flex flex-col gap-6">
-      {shuffledQuestions.map((q, qIndex) => {
+      {questions.map((q, qIndex) => {
         const selected = answers[q.cardId];
 
         return (
@@ -124,14 +92,14 @@ export function QuizPlayer({ questions }) {
         <button
           type="button"
           onClick={handleSubmit}
-          disabled={answeredCount < shuffledQuestions.length}
+          disabled={answeredCount < questions.length}
           className="self-start bg-blue-600 text-white px-4 py-2 rounded disabled:bg-gray-400"
         >
           Corregir cuestionario
         </button>
       ) : (
         <p className="text-lg font-medium">
-          Resultado: {score} de {shuffledQuestions.length} correctas
+          Resultado: {score} de {questions.length} correctas
         </p>
       )}
     </div>

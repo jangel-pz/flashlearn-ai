@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { BackLink } from "@/components/BackLink";
 import { QuizPlayer } from "@/components/QuizPlayer";
 import { createClient } from "@/lib/supabase/server";
+import { shuffleQuiz } from "@/lib/utils/quizShuffle";
 
 export default async function QuizPage({ params, searchParams }) {
   const { id } = await params;
@@ -73,13 +74,16 @@ export default async function QuizPage({ params, searchParams }) {
     };
   });
 
+  // El barajado se calcula en el servidor una sola vez por peticion. Así el orden se mantiene estable mientras el usuario responde el cuestionario.
+  const shuffledQuestions = shuffleQuiz(questions);
+
   return (
     <div className="max-w-2xl my-12 mx-auto p-6">
       <BackLink href={`/decks/${id}`} children="← Volver al mazo" />
 
       <h1 className="mt-2">Cuestionario: {deck.title}</h1>
 
-      <QuizPlayer questions={questions} />
+      <QuizPlayer questions={shuffledQuestions} />
     </div>
   );
 }
