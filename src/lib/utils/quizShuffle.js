@@ -9,7 +9,7 @@ function shuffleArray(array) {
 }
 
 // Baraja el orden de las preguntas y, dentro de cada una, el orden de sus opciones, recalculando el índice de la opción correcta para que siga apuntando a la correcta tras el barajado.
-function shuffleQuiz(questions) {
+export function shuffleQuiz(questions) {
   const shuffledQuestions = shuffleArray(questions);
 
   return shuffledQuestions.map((q) => {
