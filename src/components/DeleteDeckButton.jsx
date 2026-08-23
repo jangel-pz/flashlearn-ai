@@ -4,7 +4,6 @@ import { useTransition } from "react";
 import { deleteDeck } from "@/app/actions/deleteDeck";
 
 // Client Component para usar window.confirm() antes de ejecutar una acción destructiva e irreversible.
-
 export function DeleteDeckButton({ deckId }) {
   const [isPending, startTransition] = useTransition();
 
@@ -25,7 +24,7 @@ export function DeleteDeckButton({ deckId }) {
       type="button"
       onClick={handleDelete}
       disabled={isPending}
-      className="text-sm text-red-600 underline disabled:text-gray-400 disabled:no-underline"
+      className="text-sm font-medium text-rose-600 hover:text-rose-700 disabled:text-slate-400"
     >
       {isPending ? "Borrando…" : "Borrar mazo"}
     </button>

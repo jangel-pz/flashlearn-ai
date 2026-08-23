@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Alert } from "@/components/Alert";
-import { DeckCard } from "@/components/DeckCard";
-import { LogoutButton } from "@/components/LogoutButton";
+import { QuizPickerButton } from "@/components/QuizPickerButton";
 import { createClient } from "@/lib/supabase/server";
 
-/* Esta página comprueba POR SU CUENTA si hay un usuario logueado. Usa getUser() (no getSession()) porque getUser() verifica el token contra los servidores de Supabase mientras que getSession() solo lee la cookie (que en teoría se podría falsificar).
+/* Esta página comprueba por su cuenta si hay un usuario logueado. Usa getUser() (no getSession()) porque getUser() verifica el token contra los servidores de Supabase mientras que getSession() solo lee la cookie (que en teoría se podría falsificar).
  */
 export default async function DashboardPage({ searchParams }) {
   const params = await searchParams;
@@ -23,7 +22,7 @@ export default async function DashboardPage({ searchParams }) {
 
   const { data: decks, error: decksError } = await supabase
     .from("decks")
-    .select("id, title, created_at")
+    .select("id, title")
     .order("created_at", { ascending: false });
 
   if (decksError) {
@@ -31,37 +30,32 @@ export default async function DashboardPage({ searchParams }) {
   }
 
   return (
-    <div className="max-w-2xl my-20 mx-auto p-6">
-      <h1>Bienvenido</h1>
-      <p>Sesión iniciada como: {user.email}</p>
+    <div className="mx-auto max-w-2xl">
+      <Alert type={type} message={message} className="mb-6" />
 
-      <Alert type={type} message={message} className="mt-4" />
+      <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+        Hola de nuevo
+      </h1>
+      <p className="mt-1 text-sm text-slate-500">
+        Sesión iniciada como {user.email}
+      </p>
 
-      <div className="flex items-center justify-between mt-8">
-        <h2 className="text-lg font-medium">Tus mazos</h2>
+      <div className="mt-8 flex flex-wrap gap-3">
         <Link
           href="/decks/new"
-          className="text-sm bg-blue-600 text-white px-3 py-2 rounded"
+          className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700"
         >
           + Crear mazo
         </Link>
+
+        <QuizPickerButton decks={decks ?? []} />
       </div>
 
-      {!decks || decks.length === 0 ? (
-        <p className="mt-4 text-gray-500">
-          Todavía no has creado ningún mazo. Empieza subiendo un archivo.
+      {(!decks || decks.length === 0) && (
+        <p className="mt-10 text-sm text-slate-400">
+          Todavía no has creado ningún mazo. Empieza pulsando "Crear mazo".
         </p>
-      ) : (
-        <ul className="flex flex-col gap-2 mt-4">
-          {decks.map((deck) => (
-            <DeckCard key={deck.id} id={deck.id} title={deck.title} />
-          ))}
-        </ul>
       )}
-
-      <div className="mt-10">
-        <LogoutButton />
-      </div>
     </div>
   );
 }

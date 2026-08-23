@@ -78,10 +78,12 @@ export default async function QuizPage({ params, searchParams }) {
   const shuffledQuestions = shuffleQuiz(questions);
 
   return (
-    <div className="max-w-2xl my-12 mx-auto p-6">
-      <BackLink href={`/decks/${id}`} children="← Volver al mazo" />
+    <div className="mx-auto max-w-2xl">
+      <BackLink href={`/decks/${id}`}>← Volver al mazo</BackLink>
 
-      <h1 className="mt-2">Cuestionario: {deck.title}</h1>
+      <h1 className="mt-3 text-2xl font-bold tracking-tight text-slate-900">
+        Cuestionario: {deck.title}
+      </h1>
 
       <QuizPlayer questions={shuffledQuestions} />
     </div>

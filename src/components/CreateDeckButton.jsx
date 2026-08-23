@@ -9,9 +9,11 @@ export function GenerateDeckButton() {
     <button
       type="submit"
       disabled={pending}
-      className="bg-blue-600 text-white px-3 py-2 rounded disabled:bg-gray-400"
+      className="inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-slate-300"
     >
-      {pending ? "Generando tarjetas de estudio…" : "Generar mazo"}
+      {pending
+        ? "Generando tarjetas de estudio…"
+        : "Generar tarjetas de estudio"}
     </button>
   );
 }

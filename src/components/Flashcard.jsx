@@ -5,12 +5,25 @@ import { explainCard } from "@/app/actions/explainCard";
 
 // Componente de cliente para mostrar/ocultar respuestas
 export function Flashcard({ id, question, answer }) {
-  const [showAnswer, setShowAnswer] = useState(false);
+  const [flipped, setFlipped] = useState(false);
   const [explanation, setExplanation] = useState(null);
   const [isExplaining, setIsExplaining] = useState(false);
   const [explainError, setExplainError] = useState(null);
 
-  async function handleExplain() {
+  function toggleFlip() {
+    setFlipped((v) => !v);
+  }
+
+  function handleKeyDown(event) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      toggleFlip();
+    }
+  }
+
+  // stopPropagation hace que el clic en el boton no haga clic en la tarjeta entera y no vuelva a girar.
+  async function handleExplain(event) {
+    event.stopPropagation();
     setIsExplaining(true);
     setExplainError(null);
 
@@ -26,64 +39,56 @@ export function Flashcard({ id, question, answer }) {
   }
 
   return (
-    <div className="border rounded-lg p-4">
-      <p className="font-medium">{question}</p>
+    <div className="perspective-distant">
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={toggleFlip}
+        onKeyDown={handleKeyDown}
+        className={`relative h-64 w-full cursor-pointer rounded-xl transition-transform duration-500 transform-3d focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 ${
+          flipped ? "transform-[rotateY(180deg)]" : ""
+        }`}
+      >
+        {/* Cara frontal: pregunta */}
+        <div className="absolute inset-0 flex flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm backface-hidden">
+          <span className="h-1.5 w-10 rounded-full bg-indigo-500" />
+          <div className="mt-4 flex flex-1 items-center overflow-y-auto">
+            <p className="font-medium text-slate-800">{question}</p>
+          </div>
+          <span className="text-xs text-slate-400">Ver respuesta</span>
+        </div>
 
-      {!showAnswer ? (
-        <button
-          type="button"
-          onClick={() => setShowAnswer(true)}
-          className="mt-3 text-sm text-blue-600 underline"
-        >
-          Ver respuesta
-        </button>
-      ) : (
-        <div>
-          <p className="mt-3 text-gray-700">{answer}</p>
+        {/* Cara trasera: respuesta y explicacion */}
+        <div className="absolute inset-0 flex flex-col overflow-y-auto rounded-xl border border-indigo-200 bg-indigo-50/60 p-5 shadow-sm backface-hidden transform-[rotateY(180deg)]">
+          <span className="h-1.5 w-10 rounded-full bg-indigo-500" />
+          <p className="mt-4 text-slate-700">{answer}</p>
 
-          <div className="mt-3 flex items-center justify-between">
+          {!explanation && (
             <button
               type="button"
-              onClick={() => setShowAnswer(false)}
-              className="text-sm text-red-600 underline"
+              onClick={handleExplain}
+              disabled={isExplaining}
+              className="mt-3 self-start text-xs font-semibold text-indigo-600 hover:underline disabled:text-slate-400"
             >
-              Ocultar respuesta
+              {isExplaining ? "Generando explicación…" : "Explicar más a fondo"}
             </button>
-
-            {!explanation && (
-              <button
-                type="button"
-                onClick={handleExplain}
-                disabled={isExplaining}
-                className="text-sm text-blue-600 underline disabled:text-gray-400 disabled:no-underline"
-              >
-                {isExplaining
-                  ? "Generando explicación…"
-                  : "Explicar más a fondo"}
-              </button>
-            )}
-          </div>
+          )}
 
           {explanation && (
-            <div>
-              <p className="mt-3 text-sm text-gray-600 border-t pt-3">
-                {explanation}
-              </p>
-              <button
-                type="button"
-                onClick={() => setExplanation(false)}
-                className="mt-3 text-sm text-red-600 underline"
-              >
-                Ocultar explicación
-              </button>
-            </div>
+            <p className="mt-3 border-t border-indigo-200 pt-3 text-sm text-slate-600">
+              {explanation}
+            </p>
           )}
 
           {explainError && (
-            <p className="mt-2 text-sm text-red-600">{explainError}</p>
+            <p className="mt-2 text-xs text-rose-600">{explainError}</p>
           )}
+
+          <span className="mt-auto pt-3 text-xs text-slate-400">
+            Volver a la pregunta
+          </span>
         </div>
-      )}
+      </div>
     </div>
   );
 }

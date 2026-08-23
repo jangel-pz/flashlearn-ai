@@ -42,30 +42,47 @@ export default async function DeckPage({ params, searchParams }) {
     console.error(cardsError);
   }
 
+  const sourceFiles = (deck.source_text ?? "")
+    .split(",")
+    .map((name) => name.trim())
+    .filter(Boolean);
+
+  const createdAt = new Date(deck.created_at).toLocaleDateString("es-ES", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
   return (
-    <div className="max-w-2xl my-12 mx-auto p-6">
-      <div className="flex items-center justify-between">
-        <BackLink href="/dashboard" children="← Volver al menú" />
-        <div className="flex items-center gap-3">
-          <GenerateQuizButton deckId={deck.id} />
-          <DeleteDeckButton deckId={deck.id} />
+    <div className="mx-auto max-w-5xl">
+      <BackLink href="/dashboard">← Volver al menú</BackLink>
+
+      <Alert type={type} message={message} className="mt-4" />
+
+      <header className="mt-4 rounded-xl border border-slate-200 bg-white p-6">
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+          {deck.title}
+        </h1>
+
+        <div className="mt-3 flex flex-wrap gap-x-6 gap-y-1 text-sm text-slate-500">
+          <span>
+            {cards?.length ?? 0} tarjeta{cards?.length === 1 ? "" : "s"}
+          </span>
+          <span>Creado el {createdAt}</span>
+          {sourceFiles.length > 0 && (
+            <span className="truncate">
+              Creado desde: {sourceFiles.join(", ")}
+            </span>
+          )}
         </div>
-      </div>
-
-      <h1 className="mt-2">{deck.title}</h1>
-
-      <Alert type={type} message={message} />
-
-      <p className="text-sm text-gray-500">
-        {cards?.length ?? 0} tarjeta{cards?.length === 1 ? "" : "s"}
-      </p>
+      </header>
 
       {!cards || cards.length === 0 ? (
-        <p className="mt-8 text-gray-500">
+        <p className="mt-10 text-sm text-slate-400">
           Este mazo todavía no tiene tarjetas.
         </p>
       ) : (
-        <div className="flex flex-col gap-4 mt-8">
+        <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {cards.map((card) => (
             <Flashcard
               key={card.id}
@@ -76,6 +93,11 @@ export default async function DeckPage({ params, searchParams }) {
           ))}
         </div>
       )}
+
+      <div className="mt-10 flex items-center justify-between border-t border-slate-200 pt-6">
+        <GenerateQuizButton deckId={deck.id} />
+        <DeleteDeckButton deckId={deck.id} />
+      </div>
     </div>
   );
 }
