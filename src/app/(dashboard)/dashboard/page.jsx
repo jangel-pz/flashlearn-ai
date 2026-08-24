@@ -53,7 +53,8 @@ export default async function DashboardPage({ searchParams }) {
 
       {(!decks || decks.length === 0) && (
         <p className="mt-10 text-sm text-slate-400">
-          Todavía no has creado ningún mazo. Empieza pulsando "Crear mazo".
+          Todavía no has creado ningún mazo. Empieza pulsando &quot;Crear
+          mazo&quot;.
         </p>
       )}
     </div>
