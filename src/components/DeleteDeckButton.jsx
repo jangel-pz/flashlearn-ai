@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
-import { deleteDeck } from "@/app/actions/deleteDeck";
+import { deleteDeck } from "@/app/actions";
 
 // Client Component para usar window.confirm() antes de ejecutar una acción destructiva e irreversible.
 export function DeleteDeckButton({ deckId }) {

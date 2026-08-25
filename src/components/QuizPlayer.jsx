@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { submitQuizAttempt } from "@/app/actions/submitQuizAttempt";
+import { submitQuizAttempt } from "@/app/actions";
 
 function ResultIcon({ correct }) {
   return (

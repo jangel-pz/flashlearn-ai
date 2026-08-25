@@ -1,14 +1,14 @@
 "use client";
 
 import { useTransition } from "react";
-import { generateQuiz } from "@/app/actions/createQuiz";
+import { createQuiz } from "@/app/actions";
 
 export function CreateQuizButton({ deckId }) {
   const [isPending, startTransition] = useTransition();
 
   function handleClick() {
     startTransition(() => {
-      generateQuiz(deckId);
+      createQuiz(deckId);
     });
   }
 

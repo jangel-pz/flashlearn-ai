@@ -9,7 +9,7 @@ import { quizGenerationSchema } from "@/lib/ai/schemas";
 // Numero de preguntas por intento de cuestionario. Se eligen al azar en cada intento y ahorran uso de IA las primeras veces
 const QUESTIONS_PER_ATTEMPT = 10;
 
-export async function generateQuiz(deckId) {
+export async function createQuiz(deckId) {
   const supabase = await createClient();
 
   const {

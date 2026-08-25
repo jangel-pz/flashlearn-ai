@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { generateQuiz } from "@/app/actions/createQuiz";
+import { createQuiz } from "@/app/actions";
 
 export function QuizPickerButton({ decks }) {
   const [open, setOpen] = useState(false);
@@ -9,7 +9,7 @@ export function QuizPickerButton({ decks }) {
 
   function handlePick(deckId) {
     startTransition(() => {
-      generateQuiz(deckId);
+      createQuiz(deckId);
     });
   }
 

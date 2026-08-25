@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
-import { deleteDeck } from "@/app/actions/deleteDeck";
-import { generateQuiz } from "@/app/actions/createQuiz";
+import { createQuiz, deleteDeck } from "@/app/actions";
 
 export function DeckMenu({ deckId }) {
   const [open, setOpen] = useState(false);
@@ -23,7 +22,7 @@ export function DeckMenu({ deckId }) {
   function handleQuiz() {
     setOpen(false);
     startTransition(() => {
-      generateQuiz(deckId);
+      createQuiz(deckId);
     });
   }
 

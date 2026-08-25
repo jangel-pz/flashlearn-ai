@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { explainCard } from "@/app/actions/explainCard";
+import { explainCard } from "@/app/actions";
 import { ExplanationModal } from "@/components";
 
 // Componente de cliente para mostrar/ocultar respuestas

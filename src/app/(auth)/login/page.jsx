@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Alert, UserForm } from "@/components";
-import { login } from "@/app/actions/login";
+import { login } from "@/app/actions";
 
 export default async function LoginPage({ searchParams }) {
   const params = await searchParams;
