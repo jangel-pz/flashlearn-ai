@@ -1,10 +1,12 @@
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { Alert } from "@/components/Alert";
-import { BackLink } from "@/components/BackLink";
-import { Flashcard } from "@/components/Flashcard";
-import { DeleteDeckButton } from "@/components/DeleteDeckButton";
-import { GenerateQuizButton } from "@/components/CreateQuizButton";
+import {
+  Alert,
+  BackLink,
+  Flashcard,
+  DeleteDeckButton,
+  CreateQuizButton,
+} from "@/components";
 
 export default async function DeckPage({ params, searchParams }) {
   const { id } = await params;
@@ -95,7 +97,7 @@ export default async function DeckPage({ params, searchParams }) {
       )}
 
       <div className="mt-10 flex items-center justify-between border-t border-slate-200 pt-6">
-        <GenerateQuizButton deckId={deck.id} />
+        <CreateQuizButton deckId={deck.id} />
         <DeleteDeckButton deckId={deck.id} />
       </div>
     </div>

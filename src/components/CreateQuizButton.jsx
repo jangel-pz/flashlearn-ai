@@ -3,7 +3,7 @@
 import { useTransition } from "react";
 import { generateQuiz } from "@/app/actions/createQuiz";
 
-export function GenerateQuizButton({ deckId }) {
+export function CreateQuizButton({ deckId }) {
   const [isPending, startTransition] = useTransition();
 
   function handleClick() {

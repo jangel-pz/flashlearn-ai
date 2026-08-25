@@ -1,6 +1,4 @@
-import { Alert } from "@/components/Alert";
-import { FileUploadField } from "@/components/FileUploadField";
-import { GenerateDeckButton } from "@/components/CreateDeckButton";
+import { Alert, FileUploadField, CreateDeckButton } from "@/components";
 import { generateDeckFromFiles } from "@/app/actions/createDeck";
 
 /* Server Action, sin JavaScript de cliente. El navegador se encarga de mostrar el archivo seleccionado y de bloquear el envío si el campo "required" está vacío.
@@ -24,7 +22,7 @@ export default async function NewDeckPage({ searchParams }) {
 
       <form action={generateDeckFromFiles} className="mt-6 flex flex-col gap-5">
         <FileUploadField />
-        <GenerateDeckButton />
+        <CreateDeckButton />
       </form>
     </div>
   );

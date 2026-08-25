@@ -1,9 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { UploadIcon } from "@/components/UploadIcon";
-import { FileIcon } from "@/components/FileIcon";
-import { RemoveIcon } from "@/components/RemoveIcon";
+import { FileIcon, RemoveIcon, UploadIcon } from "@/components/icons";
 
 const ACCEPTED_EXTENSIONS = [".pdf", ".txt", ".md"];
 

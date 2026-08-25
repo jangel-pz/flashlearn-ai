@@ -1,6 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import { BackLink } from "@/components/BackLink";
-import { QuizPlayer } from "@/components/QuizPlayer";
+import { BackLink, QuizPlayer } from "@/components";
 import { createClient } from "@/lib/supabase/server";
 import { shuffleQuiz } from "@/lib/utils/quizShuffle";
 

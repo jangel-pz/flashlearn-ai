@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Alert } from "@/components/Alert";
-import { QuizPickerButton } from "@/components/QuizPickerButton";
+import { Alert, QuizPickerButton } from "@/components";
 import { createClient } from "@/lib/supabase/server";
 
 /* Esta página comprueba por su cuenta si hay un usuario logueado. Usa getUser() (no getSession()) porque getUser() verifica el token contra los servidores de Supabase mientras que getSession() solo lee la cookie (que en teoría se podría falsificar).

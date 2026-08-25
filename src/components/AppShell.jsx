@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Topbar } from "@/components/Topbar";
-import { Sidebar } from "@/components/Sidebar";
+import { Topbar, Sidebar } from "@/components";
 
 export function AppShell({ decks, children }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);

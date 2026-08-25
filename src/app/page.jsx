@@ -1,62 +1,12 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { AppIcon } from "@/components/AppIcon";
-
-function UploadDeckIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className="h-12 w-12 text-indigo-600"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M7 3h7l4 4v14H7z" />
-      <path d="M14 3v4h4" />
-      <path d="M9.5 17.5l1-2 1 2 2 1-2 1-1 2-1-2-2-1z" />
-    </svg>
-  );
-}
-
-function ExplainIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className="h-12 w-12 text-indigo-600"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M9 18h6" />
-      <path d="M10 21h4" />
-      <path d="M12 3a6 6 0 00-3.6 10.8c.5.4.8 1 .8 1.7V16h5.6v-.5c0-.7.3-1.3.8-1.7A6 6 0 0012 3z" />
-    </svg>
-  );
-}
-
-function QuizIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className="h-12 w-12 text-indigo-600"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect x="5" y="4" width="14" height="17" rx="2" />
-      <path d="M9 3.5h6a1 1 0 011 1V6H8V4.5a1 1 0 011-1z" />
-      <path d="M8.5 12.5l1.5 1.5 3-3" />
-      <path d="M9 17h6" />
-    </svg>
-  );
-}
+import {
+  AppIcon,
+  ExplainIcon,
+  QuizIcon,
+  UploadDeckIcon,
+} from "@/components/icons";
 
 function FeatureSection({ index, title, description, icon, reverse = false }) {
   return (

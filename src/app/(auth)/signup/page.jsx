@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { Alert } from "@/components/Alert";
-import { UserForm } from "@/components/UserForm";
+import { Alert, UserForm } from "@/components";
 import { signup } from "@/app/actions/signup";
 
 export default async function SignupPage({ searchParams }) {

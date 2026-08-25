@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { DeckMenu } from "@/components/DeckMenu";
+import { DeckMenu } from "@/components";
 
 export function Sidebar({ open, decks, onNavigate }) {
   const pathname = usePathname();

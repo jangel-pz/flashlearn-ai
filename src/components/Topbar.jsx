@@ -1,5 +1,5 @@
-import { AppIcon } from "@/components/AppIcon";
-import { LogoutButton } from "@/components/LogoutButton";
+import { AppIcon } from "@/components/icons";
+import { LogoutButton } from "@/components";
 
 export function Topbar({ sidebarOpen, onToggleSidebar }) {
   return (

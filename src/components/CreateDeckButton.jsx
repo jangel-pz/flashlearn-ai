@@ -2,7 +2,7 @@
 
 import { useFormStatus } from "react-dom";
 
-export function GenerateDeckButton() {
+export function CreateDeckButton() {
   const { pending } = useFormStatus();
 
   return (
