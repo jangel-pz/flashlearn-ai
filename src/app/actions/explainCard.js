@@ -1,5 +1,6 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
 import { createClient } from "@/lib/supabase/server";
@@ -71,10 +72,13 @@ export async function explainCard(cardId) {
     };
   }
 
-  // Se guarda la explicacion para no tener que generarla de nuevo la proxima vez
+  // Se guarda la explicacion para no tener que generarla de nuevo la proxima vez. Se usa upsert() con ignoreDuplicates en vez de insert() para que los posibles duplicados se ignoren silenciosamente
   const { error: insertError } = await supabase
     .from("card_explanations")
-    .insert({ card_id: cardId, explanation });
+    .upsert(
+      { card_id: cardId, explanation },
+      { onConflict: "card_id", ignoreDuplicates: true },
+    );
 
   if (insertError) {
     console.error("Error guardando la explicación en caché:", insertError);

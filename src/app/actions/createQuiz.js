@@ -116,9 +116,13 @@ export async function createQuiz(deckId) {
       }));
 
     if (questionsToInsert.length > 0) {
+      // Se usa upsert() con ignoreDuplicates en vez de insert() para que los posibles duplicados se ignoren silenciosamente
       const { error: insertError } = await supabase
         .from("quiz_questions")
-        .insert(questionsToInsert);
+        .upsert(questionsToInsert, {
+          onConflict: "card_id",
+          ignoreDuplicates: true,
+        });
 
       if (insertError) {
         console.error("Error guardando el cuestionario:", insertError);
