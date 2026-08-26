@@ -13,7 +13,7 @@ export default async function LoginPage({ searchParams }) {
         Iniciar sesión
       </h1>
       <p className="mt-1 text-sm text-slate-500">
-        Introduce tus datos para acceder a la aplicación.
+        Introduce los datos de tu perfil para acceder a la aplicación.
       </p>
 
       <Alert type={type} message={message} className="mt-4" />

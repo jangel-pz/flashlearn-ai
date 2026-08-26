@@ -34,7 +34,7 @@ export function QuizPickerButton({ decks }) {
             onClick={(e) => e.stopPropagation()}
           >
             <h2 className="text-base font-semibold text-slate-900">
-              ¿Sobre qué mazo?
+              Tema del cuestionario
             </h2>
             <p className="mt-1 text-sm text-slate-500">
               Elige un mazo para empezar un cuestionario.
