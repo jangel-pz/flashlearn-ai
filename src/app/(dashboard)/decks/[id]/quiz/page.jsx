@@ -31,14 +31,17 @@ export default async function QuizPage({ params, searchParams }) {
 
   if (requestedCardIds.length === 0) {
     redirect(
-      `/decks/${id}?error=` +
+      `/decks/${id}?type=error&message=` +
         encodeURIComponent(
           "Pulsa 'Hacer cuestionario' para empezar un intento",
         ),
     );
   }
 
-  // Cada carta junto con su pregunta de test (si ya existe)
+  // Cada carta junto con su pregunta de test (si ya existe).
+  /*
+  IMPORTANTE: En consultas anidadas como esta, PostgREST (motor que genera API automatica en Supabase) decide automáticamente si la relación es "uno a muchos" (devuelve un array) o "uno a uno" (devuelve un objeto). Si hay una restricción unique en la clave foránea se detecta relacion "uno a uno"
+   */
   const { data: cards, error: cardsError } = await supabase
     .from("cards")
     .select("id, quiz_questions(question_text, options, correct_option)")
@@ -50,13 +53,11 @@ export default async function QuizPage({ params, searchParams }) {
   }
 
   // Si algun id pedido en la URL no pertenece al mazo o no tiene pregunta guardada se redirige al usuario para empezar un intento nuevo y correcto.
-  const validCards = (cards ?? []).filter(
-    (card) => card.quiz_questions && card.quiz_questions.length > 0,
-  );
+  const validCards = (cards ?? []).filter((card) => card.quiz_questions);
 
   if (validCards.length !== requestedCardIds.length) {
     redirect(
-      `/decks/${id}?error=` +
+      `/decks/${id}?type=error&message=` +
         encodeURIComponent(
           "Ese cuestionario ya no está disponible, empieza uno nuevo",
         ),
@@ -64,7 +65,7 @@ export default async function QuizPage({ params, searchParams }) {
   }
 
   const questions = cards.map((card) => {
-    const q = card.quiz_questions[0];
+    const q = card.quiz_questions;
     return {
       cardId: card.id,
       questionText: q.question_text,
