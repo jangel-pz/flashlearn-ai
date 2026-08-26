@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { Alert, FileUploadField, CreateDeckButton } from "@/components";
 import { createDeck } from "@/app/actions";
 
@@ -7,6 +8,15 @@ export default async function NewDeckPage({ searchParams }) {
   const params = await searchParams;
   const type = params?.type;
   const message = params?.message;
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
 
   return (
     <div className="mx-auto max-w-xl">
