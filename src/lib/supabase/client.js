@@ -1,6 +1,8 @@
 import { createBrowserClient } from "@supabase/ssr";
 
-/* Este cliente se usa dentro de Client Components (los que empiezan con "use client"), por ejemplo para suscripciones en tiempo real o cuando el propio navegador del usuario necesita hablar con Supabase.
+/**
+ * Crea un cliente de Supabase utilizable desde el navegador
+ * @returns {SupabaseClient<any, "public", "public", any, any>} El cliente de Supabase para entorno de navegador
  */
 export function createClient() {
   return createBrowserClient(

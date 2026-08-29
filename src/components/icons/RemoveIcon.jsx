@@ -1,3 +1,6 @@
+/**
+ * Icono de cruz para representar cierre o borrado de elementos
+ */
 export function RemoveIcon() {
   return (
     <svg

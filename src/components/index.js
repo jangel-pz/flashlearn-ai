@@ -8,6 +8,7 @@ export { DeleteDeckButton } from "@/components/DeleteDeckButton";
 export { ExplanationModal } from "@/components/ExplanationModal";
 export { FileUploadField } from "@/components/FileUploadField";
 export { Flashcard } from "@/components/Flashcard";
+export { LoginButton } from "@/components/LoginButton";
 export { LogoutButton } from "@/components/LogoutButton";
 export { QuizPickerButton } from "@/components/QuizPickerButton";
 export { QuizPlayer } from "@/components/QuizPlayer";

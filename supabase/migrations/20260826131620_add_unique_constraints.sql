@@ -1,13 +1,12 @@
--- ====================
+-- ==========================================================
 -- RESTRICCIONES UNIQUE
--- ====================
--- Por diseño, solo debe existir como mucho una explicación y
+-- ==========================================================
+-- Por diseño, solo debe existir como mucho una explicacion y
 -- una pregunta de test por tarjeta. Se fuerza esa regla
 -- directamente en la base de datos marcando los campos
--- correspondientes como unique, ya que el código de la aplicación
--- no puede evitar una condición de carrera por sí solo.
+-- correspondientes como unique.
 
--- Como mucho una explicación guardada por tarjeta
+-- Como mucho una explicacion guardada por tarjeta
 alter table public.card_explanations
   add constraint card_explanations_card_id_key unique (card_id);
 

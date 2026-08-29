@@ -1,9 +1,14 @@
 import { createServerClient } from "@supabase/ssr";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-// Rutas que cualquiera puede visitar sin haber iniciado sesión.
 const PUBLIC_PATHS = ["/", "/login", "/signup", "/api/auth"];
 
+/**
+ * Comprueba si una ruta determinada coincide con una ruta publica
+ * de la aplicacion
+ * @param {string} pathname - URL de la ruta a comprobar
+ * @returns {boolean} true si la URL indicada es una ruta publica de la aplicacion, false en caso contrario
+ */
 function isPublicPath(pathname) {
   return PUBLIC_PATHS.some((path) =>
     path === "/"
@@ -12,7 +17,12 @@ function isPublicPath(pathname) {
   );
 }
 
-/* Se ejecuta en cada petición (antes de renderizar la página) y refresca el token de sesión del usuario. Sin esto, la gente podría ser desconectada de forma aleatoria cuando el token caduca a mitad de uso.
+/**
+ * Refresca el token de sesion del usuario en cada peticion y
+ * protege de usuarios no autenticados las rutas que no son
+ * publicas
+ * @param {NextRequest} request - Peticion http del usuario
+ * @returns {NextResponse<unknown>} La respuesta a la peticion
  */
 export async function updateSession(request) {
   let supabaseResponse = NextResponse.next({ request });
@@ -42,8 +52,6 @@ export async function updateSession(request) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  /* Si no hay usuario logueado y la ruta pedida no está en la lista de públicas, se redirige a /login
-   */
   if (!user && !isPublicPath(request.nextUrl.pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";

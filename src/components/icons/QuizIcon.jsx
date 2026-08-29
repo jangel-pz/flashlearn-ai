@@ -1,3 +1,7 @@
+/**
+ * Icono para representar la creacion de cuestionarios a partir de
+ * tarjetas de estudio
+ */
 export function QuizIcon() {
   return (
     <svg

@@ -2,6 +2,10 @@
 
 import { useFormStatus } from "react-dom";
 
+/**
+ * Boton reutilizable para la creacion de mazos con bloqueo
+ * durante la ejecucion del evento. Debe integrarse en un formulario
+ */
 export function CreateDeckButton() {
   const { pending } = useFormStatus();
 

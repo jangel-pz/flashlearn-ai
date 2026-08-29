@@ -1,3 +1,7 @@
+/**
+ * Icono de bombilla para representar explicaciones de conceptos
+ * de las tarjetas de estudio
+ */
 export function ExplainIcon() {
   return (
     <svg

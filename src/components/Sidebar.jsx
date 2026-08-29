@@ -4,10 +4,23 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { DeckMenu } from "@/components";
 
+/**
+ * Componente que actua como barra laterla de navegacion
+ * reutilizable. Incluye un enlace a la creacion de mazos nuevos
+ * y un listado de los mazos ya creados
+ * @param {Object} props - Propiedades del componente
+ * @param {boolean} props.open - true si la barra lateral esta desplegada, false en caso contrario
+ * @param {Array<Deck>} props.decks - Listado de mazos disponibles
+ * @param {() => void} props.onNavigate - Funcion a ejecutar cuando se selecciona una opcion de navegacion
+ */
 export function Sidebar({ open, decks, onNavigate }) {
   const pathname = usePathname();
 
-  // En movil, al navegar a un mazo se cierra la sidebar para dejar ver el contenido. En escritorio solo actua por debajo de 768px.
+  /**
+   * Cierra automaticamente la barra lateral cuando se selecciona
+   * una opcion de navegacion en dispositivos moviles o en
+   * escritorio por debajo de los 768px
+   */
   function handleNavigate() {
     if (typeof window !== "undefined" && window.innerWidth < 768) {
       onNavigate?.();

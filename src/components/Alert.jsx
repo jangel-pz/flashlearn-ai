@@ -1,3 +1,11 @@
+/**
+ * Componente reutilizable para mostrar mensajes relacionados
+ * con eventos de la aplicacion
+ * @param {Object} props - Propiedades del componente
+ * @param {string} [props.type="error"] - Tipo del mensaje a mostrar (exito o error)
+ * @param {string} props.message - Contenido del mensaje a mostrar
+ * @param {string} [props.className] - Clases opcionales de TailwindCSS
+ */
 export function Alert({ type = "error", message, className = "" }) {
   if (!message) return null;
 

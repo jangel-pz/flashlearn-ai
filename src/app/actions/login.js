@@ -4,6 +4,11 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 
+/**
+ * Inicia sesion con la cuenta de usuario seleccionada
+ * (email + contraseña)
+ * @param {Array<string>} formData - Contenido de los campos 'Email' y 'Contraseña' del formulario de registro
+ */
 export async function login(formData) {
   const email = formData.get("email");
   const password = formData.get("password");
@@ -30,6 +35,10 @@ export async function login(formData) {
   redirect("/dashboard");
 }
 
+/**
+ * Cierra la sesion de la cuenta de usuario en curso y redirige
+ * a la pantalla de login
+ */
 export async function logout() {
   const supabase = await createClient();
   await supabase.auth.signOut();

@@ -4,7 +4,16 @@ import { useState } from "react";
 import { explainCard } from "@/app/actions";
 import { ExplanationModal } from "@/components";
 
-// Componente de cliente para mostrar/ocultar respuestas
+/**
+ * Componente reutilizable que actua como tarjeta de estudio con
+ * animación de volteo. Posee dos caras: una con la pregunta y
+ * otra con su correspondiente respuesta. Permite generar
+ * explicaciones detalladas de la respuesta
+ * @param {Object} props - Propiedades del componente
+ * @param {string} props.id - UUID de la tarjeta que representa
+ * @param {string} props.question - Contenido textual de la pregunta
+ * @param {string} props.answer - Contenido textual de la respuesta
+ */
 export function Flashcard({ id, question, answer }) {
   const [flipped, setFlipped] = useState(false);
   const [explanation, setExplanation] = useState(null);
@@ -12,10 +21,19 @@ export function Flashcard({ id, question, answer }) {
   const [explainError, setExplainError] = useState(null);
   const [showExplanationModal, setShowExplanationModal] = useState(false);
 
+  /**
+   * Activa la animacion de volteo de la tarjeta para alternar
+   * entre la pregunta y la respuesta
+   */
   function toggleFlip() {
     setFlipped((v) => !v);
   }
 
+  /**
+   * Maneja eventos de teclado para activar la animacion de
+   * volteo de la tarjeta cuando se pulsa Enter
+   * @param {Event} event - Evento disparado al pulsar la tecla Enter
+   */
   function handleKeyDown(event) {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
@@ -23,13 +41,22 @@ export function Flashcard({ id, question, answer }) {
     }
   }
 
-  // stopPropagation hace que el clic en el boton no haga clic en la tarjeta entera y no vuelva a girar.
+  /**
+   * Abre una ventana modal con la explicacion detallada de la
+   * respuesta de la tarjeta
+   * @param {Event} event - Evento disparado al hacer click sobre el boton que muestra la explicacion
+   */
   async function handleExplain(event) {
+    /* stopPropagation hace que el clic en el boton no haga clic
+     * en la tarjeta entera y no vuelva a girar.
+     */
     event.stopPropagation();
 
-    // Si ya la teníamos generada (el usuario cerró el modal y volvió a
-    // pulsar el botón), no llamamos otra vez al servidor: abrimos
-    // directamente el modal con el texto que ya tenemos en memoria.
+    /* Si ya estaba generada (el usuario cerró el modal y volvió
+     * a pulsar el botón), no se llama otra vez al servidor, se
+     * abre directamente el modal con el texto guardado en
+     * memoria.
+     */
     if (explanation) {
       setShowExplanationModal(true);
       return;

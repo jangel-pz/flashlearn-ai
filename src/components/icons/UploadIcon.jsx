@@ -1,3 +1,7 @@
+/**
+ * Icono para representar un campo de subida de archivos
+ * en formularios
+ */
 export function UploadIcon() {
   return (
     <svg

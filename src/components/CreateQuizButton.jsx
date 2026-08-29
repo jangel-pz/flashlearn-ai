@@ -3,6 +3,12 @@
 import { useTransition } from "react";
 import { createQuiz } from "@/app/actions";
 
+/**
+ * Boton reutilizable para la creacion de cuestionarios
+ * con bloqueo durante la ejecucion del evento
+ * @param {Object} props - Propiedades del componente
+ * @param {string} props.deckId - UUID del mazo sobre el que se quiere generar el cuestionario
+ */
 export function CreateQuizButton({ deckId }) {
   const [isPending, startTransition] = useTransition();
 

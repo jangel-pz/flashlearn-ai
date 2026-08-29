@@ -4,7 +4,10 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 
-/* Esta función se ejecuta en el SERVIDOR (nunca en el navegador del usuario), por eso es segura para hablar con Supabase directamente. Next.js la conecta con el <form> de la página gracias a `action={signup}`.
+/**
+ * Crea una nueva cuenta de usuario asociada al email y la
+ * contraseña indicadas e inicia sesion con ella
+ * @param {Array<string>} formData - Contenido de los campos 'Email' y 'Contraseña' del formulario de registro
  */
 export async function signup(formData) {
   const email = formData.get("email");
@@ -19,8 +22,6 @@ export async function signup(formData) {
 
   const supabase = await createClient();
 
-  /* 'origin' es la URL desde la que se hizo la petición (localhost en desarrollo, el dominio real en producción). Le indica a Supabase dónde debe mandar al usuario cuando confirme su email.
-   */
   const origin = (await headers()).get("origin");
 
   const { error } = await supabase.auth.signUp({
@@ -40,10 +41,15 @@ export async function signup(formData) {
     );
   }
 
-  /* Por defecto Supabase exige confirmar el email antes de poder entrar, así que se avisa al usuario de que revise su bandeja de entrada.
+  /*
+   Por defecto Supabase exige confirmar el email antes de poder
+   entrar, asi que se avisa al usuario de que revise su bandeja de
+   entrada.
    */
   redirect(
     "/signup?type=success&message=" +
-      encodeURIComponent("Le hemos enviado un email para confirmar su cuenta."),
+      encodeURIComponent(
+        "Le hemos enviado un email para confirmar su cuenta. Si no lo ve revise su bandeja de spam o inténtelo de nuevo",
+      ),
   );
 }

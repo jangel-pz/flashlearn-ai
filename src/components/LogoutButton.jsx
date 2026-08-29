@@ -3,6 +3,10 @@
 import { useTransition } from "react";
 import { logout } from "@/app/actions";
 
+/**
+ * Boton reutilizable para el cierre de sesion
+ * con bloqueo durante la ejecucion del evento
+ */
 export function LogoutButton() {
   const [isPending, startTransition] = useTransition();
 

@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+/**
+ * Esquema para generar mazos de tarjetas de estudio con IA. Se
+ * solicitan entre 5 y 20 pares pregunta/respuesta claros y no
+ * triviales sobre contenidos que deben aparecen explicitamente
+ * en los archivos de apuntes enviados
+ */
 export const deckExtractionSchema = z.object({
   title: z
     .string()
@@ -33,7 +39,15 @@ export const deckExtractionSchema = z.object({
     ),
 });
 
-/* Esquema para generar preguntas de test a partir de tarjetas ya existentes. Se pide a la IA que devuelva el "card_id" de cada pregunta para poder emparejarla con la tarjeta correcta sin depender del orden de respuesta y verificar que no hay preguntas inventadas o alucinaciones.
+/**
+ * Esquema para generar preguntas de test a partir de tarjetas
+ * con IA. Se solicita el identificador de cada pregunta para
+ * emparejarla con la tarjeta correcta sin depender del orden de
+ * respuesta y verificar que no hay preguntas inventadas o
+ * alucinaciones. Las preguntas generadas deben estar clara y
+ * directamente relacionadas con el contenido de su tarjeta y
+ * las opciones de respuesta deben ser todas verosimiles, aunque
+ * una debe ser inequivocamente correcta
  */
 export const quizGenerationSchema = z.object({
   questions: z

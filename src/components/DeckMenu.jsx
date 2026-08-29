@@ -3,6 +3,12 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { createQuiz, deleteDeck } from "@/app/actions";
 
+/**
+ * Ventana modal reutilizable con atajos para crear cuestionarios
+ * sobre un mazo o eliminar dicho mazo
+ * @param {Object} props - Propiedades del componente
+ * @param {string} props.deckId - UUID del mazo sobre el que se quiere actuar
+ */
 export function DeckMenu({ deckId }) {
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -19,6 +25,7 @@ export function DeckMenu({ deckId }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Manejador para generar el cuestionario
   function handleQuiz() {
     setOpen(false);
     startTransition(() => {
@@ -26,6 +33,7 @@ export function DeckMenu({ deckId }) {
     });
   }
 
+  // Manejador para eliminar el cuestionario
   function handleDelete() {
     setOpen(false);
     const confirmed = window.confirm(

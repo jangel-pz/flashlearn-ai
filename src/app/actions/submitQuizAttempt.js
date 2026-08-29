@@ -4,6 +4,11 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
 // results: array de { cardId, correct } — uno por cada pregunta respondida en este intento de cuestionario.
+/**
+ * Recibe los resultados de un intento de cuestionario y registra
+ * la puntuacion obtenida en la base de datos
+ * @param {Array<QuizResult>} results - lista de resultados de las preguntas un intento de cuestionario
+ */
 export async function submitQuizAttempt(results) {
   const supabase = await createClient();
 
@@ -19,7 +24,10 @@ export async function submitQuizAttempt(results) {
     return;
   }
 
-  // La función RPC de Supabase espera un array de objetos con las claves exactas "card_id" y "correct"
+  /*
+   La funcion RPC de Supabase espera un array de objetos con las
+   claves exactas "card_id" y "correct"
+   */
   const payload = results.map((r) => ({
     card_id: r.cardId,
     correct: r.correct,
@@ -30,7 +38,6 @@ export async function submitQuizAttempt(results) {
   });
 
   if (error) {
-    // No es un error crítico para el usuario (ya ha visto su resultado en pantalla), solo se registra para depurar.
     console.error("Error guardando estadísticas del cuestionario:", error);
   }
 }

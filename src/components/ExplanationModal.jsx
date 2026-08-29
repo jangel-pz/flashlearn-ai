@@ -2,6 +2,14 @@
 
 import ReactMarkdown from "react-markdown";
 
+/**
+ * Ventana modal para mostrar explicaciones detalladas de
+ * tarjetas de estudio
+ * @param {Object} props - Propiedades del componente
+ * @param {boolean} props.open - Indica si la ventana esta abierta o cerrada en un momento determinado
+ * @param {() => void} props.onClose - Accion a realizar cuando se cierra la ventana
+ * @param {string} props.explanation - Contenido textual de la explacacion de la tarjeta de estudio
+ */
 export function ExplanationModal({ open, onClose, explanation }) {
   if (!open) return null;
 

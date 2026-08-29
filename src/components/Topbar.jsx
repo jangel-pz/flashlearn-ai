@@ -1,6 +1,14 @@
 import { AppIcon } from "@/components/icons";
 import { LogoutButton } from "@/components";
 
+/**
+ * Componente que actua como barra superior con utilidades.
+ * Permite desplegar y cerrar la barra lateral de navegacion,
+ * navegar al dashboard y cerrar sesion
+ * @param {Object} props - Propiedades del componente
+ * @param {boolean} props.sidebarOpen - true si la barra lateral esta desplegada, false en caso contrario
+ * @param {() => void} props.onToggleSidebar - Funcion a ejecutar cuando se selecciona el boton para desplegar la barra lateral
+ */
 export function Topbar({ sidebarOpen, onToggleSidebar }) {
   return (
     <header className="flex h-14 shrink-0 items-center justify-between border-b border-slate-200 bg-white px-4 sm:px-6">

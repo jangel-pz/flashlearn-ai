@@ -6,10 +6,17 @@ import { google } from "@ai-sdk/google";
 import { createClient } from "@/lib/supabase/server";
 import { deckExtractionSchema } from "@/lib/ai/schemas";
 
-// Límite defensivo: Gemini acepta archivos "inline" hasta cierto tamaño
 const MAX_FILE_SIZE_MB = 10;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
+/**
+ * Crea un nuevo mazo de tarjetas de estudio a partir de los
+ * archivos de apuntes que recibe. Envia las archivos a un
+ * modelo de IA a traves de Google Gemini API y solicita la
+ * generacion de las tarjetas. Cuando las recibe, crea el mazo
+ * y las tarjetas en la base de datos
+ * @param {Array<File>} formData - lista de archivos con apuntes sobre los que se genera el mazo de tarjetas de estudio
+ */
 export async function createDeck(formData) {
   const supabase = await createClient();
 
@@ -21,7 +28,6 @@ export async function createDeck(formData) {
     redirect("/login");
   }
 
-  // formData.getAll porque el input permite subir varios archivos a la vez.
   const files = formData.getAll("files").filter((f) => f && f.size > 0);
 
   if (files.length === 0) {
@@ -41,7 +47,7 @@ export async function createDeck(formData) {
     }
   }
 
-  // El modelo recibe el PDF o imagen tal cual y lo interpreta.
+  // El modelo recibe el PDF o imagen original y lo interpreta.
   const fileParts = await Promise.all(
     files.map(async (file) => ({
       type: "file",

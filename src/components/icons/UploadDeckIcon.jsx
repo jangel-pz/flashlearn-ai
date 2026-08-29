@@ -1,3 +1,7 @@
+/**
+ * Icono para representar la creacion de mazos de tarjetas de
+ * estudio a partir de archivos de apuntes
+ */
 export function UploadDeckIcon() {
   return (
     <svg

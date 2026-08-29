@@ -5,6 +5,15 @@ import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
 import { createClient } from "@/lib/supabase/server";
 
+/**
+ * Genera una explicacion detallada sobre el concepto mostrado
+ * en una tarjeta de estudio determinada. Envia el contenido de
+ * la tarjeta a un modelo de IA (a traves de Google Gemini API)
+ * y solicita una explicacion mas extensa y accesible del mismo.
+ * Cuando la recibe, la guarda en la base de datos
+ * @param {string} cardId - UUID de la tarjeta de estudio a explicar
+ * @returns {string} La explicacion detallada sobre el contenido de la tarjeta de estudio
+ */
 export async function explainCard(cardId) {
   const supabase = await createClient();
 
@@ -16,7 +25,6 @@ export async function explainCard(cardId) {
     redirect("/login");
   }
 
-  // Si ya hay una explicacion guardada no se llama a la API de Gemini
   const { data: cached, error: cachedError } = await supabase
     .from("card_explanations")
     .select("explanation")
@@ -31,7 +39,11 @@ export async function explainCard(cardId) {
     return { explanation: cached.explanation };
   }
 
-  // Si no hay explicacion guardada se le pasa a la API de Gemini el titulo del mazo y el de la tarjeta mas el par pregunta/respuesta como contexto
+  /*
+   Si no hay explicacion guardada se le pasa a la API de Gemini el
+   titulo del mazo y el de la tarjeta mas el par pregunta
+   respuesta como contexto
+   */
   const { data: card, error: cardError } = await supabase
     .from("cards")
     .select("question, answer, decks(title, context_summary)")
@@ -72,7 +84,6 @@ export async function explainCard(cardId) {
     };
   }
 
-  // Se guarda la explicacion para no tener que generarla de nuevo la proxima vez. Se usa upsert() con ignoreDuplicates en vez de insert() para que los posibles duplicados se ignoren silenciosamente
   const { error: insertError } = await supabase
     .from("card_explanations")
     .upsert(

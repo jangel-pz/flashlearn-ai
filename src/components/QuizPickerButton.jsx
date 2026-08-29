@@ -3,6 +3,13 @@
 import { useState, useTransition } from "react";
 import { createQuiz } from "@/app/actions";
 
+/**
+ * Componente que actua como ventana modal para la seleccion
+ * de mazos. Permite empezar un cuestionario sobre el mazo
+ * elegido.
+ * @param {Object} props - Propiedades del componente
+ * @param {Array<Deck>} props.decks - Listado de mazos disponibles
+ */
 export function QuizPickerButton({ decks }) {
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();

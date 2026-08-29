@@ -3,6 +3,11 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
+/**
+ * Elimina de la base de datos un mazo determinado, asi como todas
+ * sus tarjetas y preguntas de cuestionario asociadas
+ * @param {string} deckId - UUID del mazo a eliminar
+ */
 export async function deleteDeck(deckId) {
   const supabase = await createClient();
 

@@ -3,6 +3,13 @@
 import { useState } from "react";
 import { Topbar, Sidebar } from "@/components";
 
+/**
+ * Componente que actua como marco de la aplicacion. Permite
+ * insertar un Topbar y un Sidebar sobre el contenido principal
+ * @param {Object} props - Propiedades del componente
+ * @param {Array<Deck>} props.decks - Listado de mazos disponibles
+ * @param {import('react').ReactNode} props.children - Contenido principal
+ */
 export function AppShell({ decks, children }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 

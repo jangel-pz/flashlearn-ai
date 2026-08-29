@@ -1,3 +1,6 @@
+/**
+ * Icono para representar archivos subidos a traves de formularios
+ */
 export function FileIcon() {
   return (
     <svg
