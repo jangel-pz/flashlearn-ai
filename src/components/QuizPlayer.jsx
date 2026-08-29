@@ -1,16 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import { ResultIcon } from "@/components/icons";
 import { submitQuizAttempt } from "@/app/actions";
 
-function ResultIcon({ correct }) {
-  return (
-    <span className={correct ? "text-emerald-600" : "text-rose-600"}>
-      {correct ? "✔" : "✘"}
-    </span>
-  );
-}
-
+/**
+ * Muestra las preguntas elegidas para un intento de
+ * cuestionario de un mazo determinado. Permite seleccionar las
+ * respuestas y, tras finalizar el cuestionario, corregirlas y
+ * registrar la puntuacion conseguida
+ * @param {Object} props - Propiedades del componente
+ * @param {Array<QuizQuestion>} props.questions - Listado de preguntas del intento de cuestionario
+ */
 export function QuizPlayer({ questions }) {
   // answers: { [cardId]: <indice de opcion elegida> }
   const [answers, setAnswers] = useState({});
@@ -21,7 +22,10 @@ export function QuizPlayer({ questions }) {
     setAnswers((prev) => ({ ...prev, [cardId]: optionIndex }));
   }
 
-  // Marca el cuestionario como corregido y envía los resultados para actualizar las estadísticas de cada tarjeta. Si esa segunda parte tarda o falla, no afecta a lo que el usuario ve en pantalla.
+  /**
+   * Marca el cuestionario como corregido y envia los resultados
+   * para actualizar las estadisticas de cada tarjeta.
+   */
   async function handleSubmit() {
     setSubmitted(true);
 

@@ -1,21 +1,15 @@
 "use client";
 
-import { useFormStatus } from "react-dom";
+import { LoginButton } from "@/components";
 
-function SubmitButton({ isLogin }) {
-  const { pending } = useFormStatus();
-
-  return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="mt-1 inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-slate-300"
-    >
-      {pending ? "Un momento…" : isLogin ? "Iniciar sesión" : "Crear cuenta"}
-    </button>
-  );
-}
-
+/**
+ * Componente reutilizable que actua como formulario de registro
+ * de usuarios. Permite registrar nuevos usuarios e iniciar
+ * sesion con cuentas ya existentes
+ * @param {Object} props - Propiedades del componente
+ * @param {() => void} props.submitAction - Funcion a ejecutar cuando se envia el formulario
+ * @param {boolean} props.isLogin - true si el usuario se esta registrando con una cuenta ya existente, false si se esta registrando con una nueva
+ */
 export function UserForm({ submitAction, isLogin }) {
   return (
     <form action={submitAction} className="flex flex-col gap-4">
@@ -48,7 +42,7 @@ export function UserForm({ submitAction, isLogin }) {
         />
       </label>
 
-      <SubmitButton isLogin={isLogin} />
+      <LoginButton isLogin={isLogin} />
     </form>
   );
 }
