@@ -41,6 +41,12 @@ export async function signup(formData) {
     );
   }
 
+  // Gestion de sesion para confirmacion de email desactivada
+  if (data.session) {
+    revalidatePath("/", "layout");
+    redirect("/dashboard");
+  }
+
   /*
    Por defecto Supabase exige confirmar el email antes de poder
    entrar, asi que se avisa al usuario de que revise su bandeja de
