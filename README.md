@@ -8,6 +8,8 @@
 
 Proyecto personal full-stack construido para crecer en el ámbito del desarrollo web y aprender a trabajar con tecnologías como Next.js, Supabase y Google Gemini API en un entorno de producción realista, con control de versiones y CI/CD.
 
+Puedes visitar la app haciendo click [aquí](https://flashlearn-ai-phi.vercel.app/) o copiando este enlace en tu navegador: https://flashlearn-ai-phi.vercel.app/
+
 ---
 
 ## Índice
