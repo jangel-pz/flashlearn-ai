@@ -1,6 +1,7 @@
 "use client";
 
 import ReactMarkdown from "react-markdown";
+import { RemoveIcon } from "@/components/icons";
 
 /**
  * Ventana modal para mostrar explicaciones detalladas de
@@ -32,16 +33,7 @@ export function ExplanationModal({ open, onClose, explanation }) {
             aria-label="Cerrar"
             className="shrink-0 rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
           >
-            <svg
-              viewBox="0 0 24 24"
-              className="h-5 w-5"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-            >
-              <path d="M6 6l12 12M18 6L6 18" />
-            </svg>
+            <RemoveIcon className="h-5 w-5" />
           </button>
         </div>
 

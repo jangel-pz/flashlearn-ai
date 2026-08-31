@@ -1,11 +1,13 @@
 /**
  * Icono de cruz para representar cierre o borrado de elementos
+ * @param {Object} props - Propiedades del componente
+ * @param {string} props.className - Clases opcionales de TailwindCSS
  */
-export function RemoveIcon() {
+export function RemoveIcon({ className = "h-4 w-4" }) {
   return (
     <svg
       viewBox="0 0 24 24"
-      className="h-4 w-4"
+      className={className}
       fill="none"
       stroke="currentColor"
       strokeWidth="1.8"
