@@ -28,9 +28,12 @@ export default async function DashboardPage({ searchParams }) {
     console.error(decksError);
   }
 
+  const leftMargin =
+    typeof window !== "undefined" && window.innerWidth < 768 ? "" : "ml-45";
+
   return (
     <div className="mx-auto max-w-2xl">
-      <div className="ml-45">
+      <div className={leftMargin}>
         <Alert type={type} message={message} className="mb-6" />
 
         <h1 className="text-2xl font-bold tracking-tight text-slate-900">
