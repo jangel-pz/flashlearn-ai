@@ -1,0 +1,74 @@
+name: CI/CD
+
+# Se ejecuta en cada push y en cada pull request que apunte a "main" o "dev".
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  # ============================================================
+  # JOB 1: Comprobaciones (lint + formato)
+  # ============================================================
+  # Este job se ejecuta siempre que hay push o PR a main/dev.
+  # Si falla, el job de despliegue de abajo no se ejecutara.
+  checks:
+    name: Lint y formato
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      # Instalacion de dependencias desde package-lock.json
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Comprobar errores de lint
+        run: npm run lint
+
+      # Requiere un script "format:check" en package.json
+      - name: Comprobar formato
+        run: npm run format:check
+
+      - name: Comprobar errores de compilación
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+
+  # ============================================================
+  # JOB 2: Despliegue a produccion en Vercel
+  # ============================================================
+  # Solo se ejecuta si el job "checks" ha terminado con exito y el evento es un push directo a "main"
+  deploy:
+    name: Desplegar a Vercel (producción)
+    runs-on: ubuntu-latest
+    needs: checks
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Instalar Vercel CLI
+        run: npm install --global vercel@latest
+
+      # Descarga la configuracion del proyecto de Vercel usando el token de acceso.
+      - name: Descargar configuración de Vercel
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      # Construye el proyecto usando el entorno de Vercel
+      - name: Construir el proyecto
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      # Sube el resultado ya construido y lo marca como produccion.
+      - name: Desplegar a producción
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}

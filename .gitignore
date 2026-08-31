@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+jest.config.mjs
 
 # next.js
 /.next/
@@ -39,3 +40,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Supabase
+.branches
+.temp
+config.toml
+
+# dotenvx
+supabase/.env.keys
