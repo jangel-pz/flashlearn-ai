@@ -3,7 +3,10 @@ import { redirect } from "next/navigation";
 import { Alert, QuizPickerButton } from "@/components";
 import { createClient } from "@/lib/supabase/server";
 
-/* Esta página comprueba por su cuenta si hay un usuario logueado. Usa getUser() (no getSession()) porque getUser() verifica el token contra los servidores de Supabase mientras que getSession() solo lee la cookie (que en teoría se podría falsificar).
+/*
+ Esta pagina comprueba por su cuenta si hay un usuario logueado. Usa
+ getUser() porque verifica el token contra los servidores de
+ Supabase (getSession() solo lee la cookie)
  */
 export default async function DashboardPage({ searchParams }) {
   const params = await searchParams;
@@ -28,12 +31,9 @@ export default async function DashboardPage({ searchParams }) {
     console.error(decksError);
   }
 
-  const leftMargin =
-    typeof window !== "undefined" && window.innerWidth < 768 ? "" : "ml-45";
-
   return (
     <div className="mx-auto max-w-2xl">
-      <div className={leftMargin}>
+      <div className="md:ml-45">
         <Alert type={type} message={message} className="mb-6" />
 
         <h1 className="text-2xl font-bold tracking-tight text-slate-900">
