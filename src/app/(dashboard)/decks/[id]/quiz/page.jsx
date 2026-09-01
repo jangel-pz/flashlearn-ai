@@ -40,7 +40,11 @@ export default async function QuizPage({ params, searchParams }) {
 
   // Cada carta junto con su pregunta de test (si ya existe).
   /*
-  IMPORTANTE: En consultas anidadas como esta, PostgREST (motor que genera API automatica en Supabase) decide automáticamente si la relación es "uno a muchos" (devuelve un array) o "uno a uno" (devuelve un objeto). Si hay una restricción unique en la clave foránea se detecta relacion "uno a uno"
+   IMPORTANTE: En consultas anidadas como esta, PostgREST (motor que
+   genera API automatica en Supabase) decide automaticamente si la
+   relacion es "uno a muchos" (devuelve un array) o "uno a uno"
+   (devuelve un objeto). Si hay una restriccion unique en la clave
+   foranea se detecta relacion "uno a uno"
    */
   const { data: cards, error: cardsError } = await supabase
     .from("cards")
@@ -52,7 +56,11 @@ export default async function QuizPage({ params, searchParams }) {
     console.error(cardsError);
   }
 
-  // Si algun id pedido en la URL no pertenece al mazo o no tiene pregunta guardada se redirige al usuario para empezar un intento nuevo y correcto.
+  /*
+   Si algun id pedido en la URL no pertenece al mazo o no tiene
+   pregunta guardada se redirige al usuario para empezar un intento
+   nuevo y correcto
+   */
   const validCards = (cards ?? []).filter((card) => card.quiz_questions);
 
   if (validCards.length !== requestedCardIds.length) {
@@ -74,7 +82,11 @@ export default async function QuizPage({ params, searchParams }) {
     };
   });
 
-  // El barajado se calcula en el servidor una sola vez por peticion. Así el orden se mantiene estable mientras el usuario responde el cuestionario.
+  /*
+   El barajado se calcula en el servidor una sola vez por peticion.
+   Asi el orden se mantiene estable mientras el usuario responde el
+   cuestionario
+   */
   const shuffledQuestions = shuffleQuiz(questions);
 
   return (
