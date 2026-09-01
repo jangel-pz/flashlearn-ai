@@ -9,7 +9,7 @@ import { DeckMenu } from "@/components";
  * reutilizable. Incluye un enlace a la creacion de mazos nuevos
  * y un listado de los mazos ya creados
  * @param {Object} props - Propiedades del componente
- * @param {boolean} props.open - true si la barra lateral esta desplegada, false en caso contrario
+ * @param {boolean} props.override - true si la barra lateral actua con el comportamiento por defecto, false si actua por evento de usuario
  * @param {Array<Deck>} props.decks - Listado de mazos disponibles
  * @param {() => void} props.onNavigate - Funcion a ejecutar cuando se selecciona una opcion de navegacion
  */

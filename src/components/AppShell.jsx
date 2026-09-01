@@ -20,6 +20,11 @@ export function AppShell({ decks, children }) {
   */
   const [override, setOverride] = useState(null);
 
+  /**
+   * Establece el estado por defecto del componente Sidebar en
+   * funcion del entorno (escritorio o movil) y el comportamiento
+   * cuando el usuario fuerza su apertura o cierre
+   */
   function toggleSidebar() {
     if (override === null) {
       setOverride(window.innerWidth < 768);
