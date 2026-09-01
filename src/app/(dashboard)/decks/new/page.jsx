@@ -3,7 +3,10 @@ import { Alert, FileUploadField, CreateDeckButton } from "@/components";
 import { createClient } from "@/lib/supabase/server";
 import { createDeck } from "@/app/actions";
 
-/* Server Action, sin JavaScript de cliente. El navegador se encarga de mostrar el archivo seleccionado y de bloquear el envío si el campo "required" está vacío.
+/*
+ Server Action, sin JavaScript de cliente. El navegador se encarga
+ de mostrar el archivo seleccionado y de bloquear el envio si el
+ campo "required" está vacio.
  */
 export default async function NewDeckPage({ searchParams }) {
   const params = await searchParams;

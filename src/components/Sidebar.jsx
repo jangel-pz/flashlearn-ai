@@ -9,11 +9,11 @@ import { DeckMenu } from "@/components";
  * reutilizable. Incluye un enlace a la creacion de mazos nuevos
  * y un listado de los mazos ya creados
  * @param {Object} props - Propiedades del componente
- * @param {boolean} props.open - true si la barra lateral esta desplegada, false en caso contrario
+ * @param {boolean} props.override - true si la barra lateral actua con el comportamiento por defecto, false si actua por evento de usuario
  * @param {Array<Deck>} props.decks - Listado de mazos disponibles
  * @param {() => void} props.onNavigate - Funcion a ejecutar cuando se selecciona una opcion de navegacion
  */
-export function Sidebar({ open, decks, onNavigate }) {
+export function Sidebar({ override, decks, onNavigate }) {
   const pathname = usePathname();
 
   /**
@@ -27,15 +27,24 @@ export function Sidebar({ open, decks, onNavigate }) {
     }
   }
 
+  /*
+   Por defecto (override === null) el estado se resuelve solo con
+   CSS: abierta en escritorio (md:translate-x-0), fuera de pantalla
+   en movil (-translate-x-full). Si el usuario ha tocado el botón,
+   "override" manda en cualquier tamaño de pantalla.
+   */
+  let stateClasses;
+  if (override === null) {
+    stateClasses = "-translate-x-full md:translate-x-0";
+  } else if (override) {
+    stateClasses = "translate-x-0";
+  } else {
+    stateClasses = "-translate-x-full md:w-0 md:overflow-hidden md:border-none";
+  }
+
   return (
     <aside
-      className={`
-        fixed left-0 top-14 bottom-0 z-30 w-72 border-r border-slate-200 bg-white
-        transition-transform duration-200 ease-in-out
-        ${open ? "translate-x-0" : "-translate-x-full"}
-        md:static md:transition-[width] md:duration-200
-        ${open ? "md:w-72" : "md:w-0 md:overflow-hidden md:border-none"}
-      `}
+      className={`fixed left-0 top-14 bottom-0 z-30 w-72 border-r border-slate-200 bg-white transition-transform duration-200 ease-in-out md:static md:transition-[width] md:duration-200 ${stateClasses}`}
     >
       <div className="flex h-full w-72 flex-col p-4">
         <Link
